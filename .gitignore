@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+/data
+/coverage
+/temp
+/.idea
+/.vscode
+/yarn-error.log
+/.coveralls.yml
+*.tsbuildinfo
+.DS_Store
+.npmrc

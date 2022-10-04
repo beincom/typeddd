@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es2017",
+      "lib": ["es2017"],
+      "sourceMap": true,
+      "declaration": true,
+      "esModuleInterop": true,
+      "preserveConstEnums": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "suppressImplicitAnyIndexErrors": true,
+    },
+    "exclude": [
+      "**/node_modules",
+      "**/dist",
+    ]
+  }
