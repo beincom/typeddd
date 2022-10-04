@@ -19,7 +19,8 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "compile": "tsc -p tsconfig.build.json",
-    "build": "yarn clean && yarn compile"
+    "copy": "node ../../scripts/build.js",
+    "build": "yarn clean && yarn compile && yarn copy"
   },
   "bugs": {
     "url": "https://github.com/Beincomm/typeddd/issues"
