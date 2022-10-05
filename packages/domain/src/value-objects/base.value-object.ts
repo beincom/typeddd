@@ -15,7 +15,7 @@ export abstract class BaseValueObject<T> {
     this.props = props;
   }
 
-  static isValueObject(obj: unknown): obj is BaseValueObject<unknown> {
+  public static isValueObject(obj: unknown): obj is BaseValueObject<unknown> {
     return obj instanceof BaseValueObject;
   }
 

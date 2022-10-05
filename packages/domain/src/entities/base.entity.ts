@@ -5,11 +5,14 @@ import {
   UpdatedAtValueObject,
   DateValueObject,
   BaseValueObject,
+  ValueObjectProps,
 } from '../value-objects';
 import { ValueObjectFactory } from '../factories';
 import { domainObjectToPlainObject } from '../utils';
 import { deepCopy, isNull, isUndefined } from '@typeddd/common';
 import { DefaultEntityProps } from '../interfaces/domain/entity.interfaces';
+
+export type FullProps<T> = DefaultEntityProps<T>;
 
 export abstract class BaseEntity<EntityProps> {
   /**
@@ -25,12 +28,12 @@ export abstract class BaseEntity<EntityProps> {
 
   private readonly _deletedAt: UpdatedAtValueObject;
 
-  protected constructor(entityProps: DefaultEntityProps<EntityProps>) {
+  protected constructor(entityProps: FullProps<EntityProps>) {
     const { id, props, createdAt, updatedAt, deletedAt } = entityProps;
 
     this.id = id;
 
-    const nowValue = ValueObjectFactory.create<DateValueObject, Date>(DateValueObject);
+    const nowValue = ValueObjectFactory.create<DateValueObject, Date>(DateValueObject, new Date());
 
     this._createdAt = createdAt || CreatedAtValueObject.fromPrototype(nowValue);
 
@@ -48,11 +51,12 @@ export abstract class BaseEntity<EntityProps> {
   public static isDomainEntity<Entity extends BaseEntity<unknown>>(
     entity: Entity,
   ): entity is Entity {
-    return entity instanceof BaseValueObject;
+    // eslint-disable-next-line no-prototype-builtins
+    return BaseEntity.prototype.isPrototypeOf(entity);
   }
 
   public toObject<T>(): T {
-    const plainProps = domainObjectToPlainObject(this.props);
+    const plainProps = domainObjectToPlainObject(this._props);
 
     const result = {
       id: this._id.value,
@@ -92,7 +96,7 @@ export abstract class BaseEntity<EntityProps> {
     return Object.freeze(copyProps);
   }
 
-  public get allProps(): DefaultEntityProps<EntityProps> {
+  public get allProps(): FullProps<EntityProps> {
     const copyProps = deepCopy({
       id: this._id,
       props: this._props,

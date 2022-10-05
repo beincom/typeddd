@@ -1,8 +1,17 @@
 import { DateValueObject } from './date.value-object';
+import { ValueObjectProps } from '../value-objects';
+import { isNull, isUndefined } from '@typeddd/common';
 
 export class DeletedAtValueObject extends DateValueObject {
-  constructor(date = new Date()) {
+  public constructor(date = new Date()) {
     super(date);
+  }
+
+  public validate(props: ValueObjectProps<Date>) {
+    if (isNull(props.value) || isUndefined(props.value)) {
+      return;
+    }
+    super.validate(props);
   }
 
   public static fromPrototype(dateValueObject: DateValueObject): DeletedAtValueObject {

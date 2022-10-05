@@ -5,6 +5,11 @@ const config: Config.InitialOptions = {
   preset: 'ts-jest',
   runtime: '@side/jest-runtime',
   collectCoverage: false,
+  moduleFileExtensions: ['js', 'json', 'ts'],
+  testRegex: '.*\\.spec\\.ts$',
+  transform: {
+    '^.+\\.(t|j)s$': 'ts-jest',
+  },
   collectCoverageFrom: ['<rootDir>/packages/*/src/**/*.ts'],
   moduleNameMapper: {
     '@typeddd/(.*)/package.json': '<rootDir>/packages/$1/package.json',
@@ -12,12 +17,6 @@ const config: Config.InitialOptions = {
   },
   modulePathIgnorePatterns: ['dist/package.json', '<rootDir>/package.json'],
   setupFiles: ['<rootDir>/tests/setup.ts'],
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tests/tsconfig.json',
-      isolatedModules: true,
-    },
-  },
 };
 
 export default config;
