@@ -1,12 +1,10 @@
-import { BaseValueObject } from './base.value-object';
+import { IdValueObject } from './id.value-object';
 import type { DomainPrimitive } from './base.value-object';
 import { isUUID, IllegalArgumentException, generateUUID } from '@typeddd/common';
 
-export class UUIDValueObject extends BaseValueObject<string> {
-  protected constructor(id: string) {
-    super({
-      value: id,
-    });
+export class UUIDValueObject extends IdValueObject {
+  public constructor(id: string) {
+    super(id);
   }
 
   public validate(props: DomainPrimitive<string>): void {

@@ -4,13 +4,11 @@ import {
   CreatedAtValueObject,
   UpdatedAtValueObject,
   DateValueObject,
-  BaseValueObject,
-  ValueObjectProps,
 } from '../value-objects';
 import { ValueObjectFactory } from '../factories';
 import { domainObjectToPlainObject } from '../utils';
 import { deepCopy, isNull, isUndefined } from '@typeddd/common';
-import { DefaultEntityProps } from '../interfaces/domain/entity.interfaces';
+import { DefaultEntityProps } from '../interfaces/domain';
 
 export type FullProps<T> = DefaultEntityProps<T>;
 

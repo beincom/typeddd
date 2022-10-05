@@ -85,7 +85,7 @@ async function getNextVersion() {
     pkgJson.version = nextVersion;
 
     for (const dep of Object.keys(pkgJson.dependencies ?? {})) {
-      if (dep.startsWith('@mikro-orm/') || dep === 'mikro-orm') {
+      if (dep.startsWith('@typeddd/') || dep === 'typeddd') {
         const prefix = pkgJson.dependencies[dep].startsWith('^')
           ? '^'
           : pkgJson.dependencies[dep].startsWith('~')
@@ -96,7 +96,7 @@ async function getNextVersion() {
     }
 
     for (const dep of Object.keys(pkgJson.peerDependencies ?? {})) {
-      if (dep.startsWith('@mikro-orm/') || dep === 'mikro-orm') {
+      if (dep.startsWith('@typeddd/') || dep === 'typeddd') {
         pkgJson.peerDependencies[dep] = '~' + nextVersion;
       }
     }

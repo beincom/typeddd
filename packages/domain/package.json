@@ -1,6 +1,6 @@
 {
   "name": "@typeddd/domain",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Domain Driven Design (@domain package)",
   "keywords": [
     "typescript",
@@ -29,10 +29,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@typeddd/common": "^0.0.1"
+    "@typeddd/common": "^0.0.2"
   },
   "peerDependencies": {
-    "@typeddd/common": "^0.0.1"
+    "@typeddd/common": "~0.0.2"
   },
   "peerDependenciesMeta": {
     "@typeddd/common": {
