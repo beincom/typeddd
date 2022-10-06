@@ -1,10 +1,7 @@
 import { DeepPartial } from '@typeddd/common';
 import { BaseValueObject } from '../../value-objects';
 import { BaseEntity } from '../../entities/base.entity';
-import { BaseEntityProps } from '../domain/entity.interfaces';
-import { UUIDValueObject } from '../../value-objects/uuid.value-object';
-
-export type ID<V extends UUIDValueObject = UUIDValueObject> = V;
+import { FullProps, ID } from '../domain/entity.interfaces';
 
 export interface Command<Entity, EntityProps> {
   create(entity: Entity): Promise<Entity> | never;
@@ -15,7 +12,7 @@ export interface Command<Entity, EntityProps> {
   destroy(props: EntityProps): Promise<number> | never;
 }
 
-export type QueryParams<EntityProps> = DeepPartial<EntityProps & BaseEntityProps>;
+export type QueryParams<EntityProps> = DeepPartial<FullProps<any, EntityProps>>;
 
 export type OrderBy = 'DESC' | 'ASC';
 
@@ -46,7 +43,7 @@ export interface Query<Entity, EntityProps> {
 }
 
 export interface RepositoryPort<
-  Entity extends BaseEntity<any>,
+  Entity extends BaseEntity<any, any>,
   EntityProps extends BaseValueObject<any>,
 > extends Command<Entity, EntityProps>,
     Query<Entity, EntityProps> {}

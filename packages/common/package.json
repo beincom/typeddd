@@ -1,6 +1,6 @@
 {
   "name": "@typeddd/common",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Domain Driven Design (@common package)",
   "keywords": [
     "typescript",
@@ -29,6 +29,7 @@
     "access": "public"
   },
   "dependencies": {
+    "fast-equals": "^4.0.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

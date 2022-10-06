@@ -1,22 +1,19 @@
 import {
-  IdValueObject,
   DeletedAtValueObject,
   CreatedAtValueObject,
   UpdatedAtValueObject,
   DateValueObject,
 } from '../value-objects';
+import { FullProps, ID } from '../interfaces/domain';
 import { ValueObjectFactory } from '../factories';
 import { domainObjectToPlainObject } from '../utils';
-import { deepCopy, isNull, isUndefined } from '@typeddd/common';
-import { DefaultEntityProps } from '../interfaces/domain';
+import { deepCopy, isNull, isUndefined, deepEqual } from '@typeddd/common';
 
-export type FullProps<T> = DefaultEntityProps<T>;
-
-export abstract class BaseEntity<EntityProps> {
+export abstract class BaseEntity<EntityIdProps, EntityProps> {
   /**
    * Override id if need
    */
-  protected abstract _id: IdValueObject;
+  protected abstract _id: ID<EntityIdProps>;
 
   private readonly _props: EntityProps;
 
@@ -26,7 +23,7 @@ export abstract class BaseEntity<EntityProps> {
 
   private readonly _deletedAt: UpdatedAtValueObject;
 
-  protected constructor(entityProps: FullProps<EntityProps>) {
+  protected constructor(entityProps: FullProps<EntityIdProps, EntityProps>) {
     const { id, props, createdAt, updatedAt, deletedAt } = entityProps;
 
     this.id = id;
@@ -46,7 +43,7 @@ export abstract class BaseEntity<EntityProps> {
 
   public abstract validate(): void | never;
 
-  public static isDomainEntity<Entity extends BaseEntity<unknown>>(
+  public static isDomainEntity<Entity extends BaseEntity<unknown, unknown>>(
     entity: Entity,
   ): entity is Entity {
     // eslint-disable-next-line no-prototype-builtins
@@ -54,18 +51,19 @@ export abstract class BaseEntity<EntityProps> {
   }
 
   public toObject<T>(): T {
-    const plainProps = domainObjectToPlainObject(this._props);
-
     const result = {
       id: this._id.value,
-      ...plainProps,
+      ...this._props,
       createdAt: this._createdAt.value,
       updatedAt: this._updatedAt.value,
+      deletedAt: this._deletedAt?.value || null,
     };
-    return Object.freeze(result) as unknown as T;
+    const plainProps = domainObjectToPlainObject(result);
+
+    return plainProps as unknown as T;
   }
 
-  public equals(object?: BaseEntity<EntityProps>): boolean {
+  public equals(object?: BaseEntity<EntityIdProps, EntityProps>): boolean {
     if (isNull(object) || isUndefined(object)) {
       return false;
     }
@@ -78,23 +76,18 @@ export abstract class BaseEntity<EntityProps> {
       return false;
     }
 
-    return this.id ? this.id.equals(object.id) : false;
+    return this.id ? deepEqual(this.id, object.id) : false;
   }
 
-  public get id(): IdValueObject {
+  public get id(): ID<EntityIdProps> {
     return this._id;
   }
 
-  private set id(id: IdValueObject) {
+  private set id(id: ID<EntityIdProps>) {
     this._id = id;
   }
 
-  public get props(): EntityProps {
-    const copyProps = deepCopy(this._props);
-    return Object.freeze(copyProps);
-  }
-
-  public get allProps(): FullProps<EntityProps> {
+  public get props(): FullProps<EntityIdProps, EntityProps> {
     const copyProps = deepCopy({
       id: this._id,
       props: this._props,
@@ -104,6 +97,14 @@ export abstract class BaseEntity<EntityProps> {
     });
 
     return Object.freeze(copyProps);
+  }
+
+  public clone(): BaseEntity<EntityIdProps, EntityProps> {
+    return (<T>(instance: T): T => {
+      const copy = new (instance.constructor as { new (): T })();
+      Object.assign(copy, deepCopy(instance));
+      return copy;
+    })(this);
   }
 
   public get createdAt(): CreatedAtValueObject {

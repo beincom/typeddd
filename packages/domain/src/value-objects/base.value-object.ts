@@ -1,4 +1,5 @@
 import { domainObjectToPlainObject } from '../utils';
+import { isFunction, isObject, isOwnerProperties } from '@typeddd/common';
 
 export type Primitive = string | number | boolean;
 
@@ -16,7 +17,7 @@ export abstract class BaseValueObject<T> {
   }
 
   public static isValueObject(obj: unknown): obj is BaseValueObject<unknown> {
-    return obj instanceof BaseValueObject;
+    return obj instanceof BaseValueObject || (obj && isOwnerProperties(obj, ['value']));
   }
 
   public abstract validate(props: ValueObjectProps<T>): void | never;
@@ -28,7 +29,7 @@ export abstract class BaseValueObject<T> {
 
     const propsCopy = domainObjectToPlainObject(this.props);
 
-    return Object.freeze(propsCopy);
+    return Object.freeze(propsCopy as unknown as T);
   }
 
   public equals(props?: ValueObjectProps<T>): boolean {

@@ -49,7 +49,7 @@ async function getNextVersion() {
   const versions = [];
 
   try {
-    const versionString = execSync(`npm show @mikro-orm/core versions --json`, {
+    const versionString = execSync(`npm show @typeddd/domain versions --json`, {
       encoding: 'utf8',
       stdio: 'pipe',
     });
@@ -69,19 +69,20 @@ async function getNextVersion() {
     process.exit(1);
   }
 
-  const preid = options.preid ?? 'dev';
-  const prereleaseNumbers = versions
-    .filter((v) => v.startsWith(`${version}-${preid}.`))
-    .map((v) => Number(v.match(/\.(\d+)$/)?.[1]));
-  const lastPrereleaseNumber = Math.max(-1, ...prereleaseNumbers);
-
-  return `${version}-${preid}.${lastPrereleaseNumber + 1}`;
+  // const preid = options.preid ?? '';
+  // const prereleaseNumbers = versions
+  //   .filter((v) => v.startsWith(`${version}-${preid}.`))
+  //   .map((v) => Number(v.match(/\.(\d+)$/)?.[1]));
+  //   const lastPrereleaseNumber = Math.max(-1, ...prereleaseNumbers);
+  // .${lastPrereleaseNumber + 1}
+  return `${version}`;
 }
 
 (async () => {
   if (options.canary) {
     const pkgJson = rq(pkgPath);
     const nextVersion = await getNextVersion();
+    console.log('nextVersion', nextVersion);
     pkgJson.version = nextVersion;
 
     for (const dep of Object.keys(pkgJson.dependencies ?? {})) {

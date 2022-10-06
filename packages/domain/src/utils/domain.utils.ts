@@ -2,10 +2,11 @@ import { BaseValueObject } from '../value-objects';
 import type { BaseEntity } from '../entities/base.entity';
 import { deepCopy, isObject, isOwnerProperties } from '@typeddd/common';
 
-export const isEntity = (obj: any): obj is BaseEntity<any> => {
+export const isEntity = (obj: any): obj is BaseEntity<any, any> => {
   return (
+    obj &&
     isOwnerProperties(obj, ['toObject', 'id']) &&
-    BaseValueObject.isValueObject((obj as BaseEntity<any>).id)
+    BaseValueObject.isValueObject((obj as BaseEntity<any, any>).id)
   );
 };
 
@@ -19,21 +20,31 @@ export const toPlainObject = (item: any) => {
   return item;
 };
 
-export const domainObjectToPlainObject = (props: any) => {
-  const propsCopy = { ...props };
+const forkAssign = (source: any, readOnlyProperty: any, value: any): any => {
+  Object.defineProperties(source, {
+    [readOnlyProperty]: {
+      value,
+      writable: true,
+    },
+  });
+};
 
-  for (const prop in propsCopy) {
-    if (Array.isArray(propsCopy[prop])) {
-      propsCopy[prop] = propsCopy[prop].map((item) => {
+export const domainObjectToPlainObject = (props: any) => {
+  const propsCopy = {};
+
+  for (const prop in props) {
+    if (Array.isArray(props[prop])) {
+      propsCopy[prop] = props[prop].map((item) => {
         return toPlainObject(item);
       });
     }
-    if (isObject(propsCopy[prop])) {
-      for (const entityProp in propsCopy[prop]) {
-        propsCopy[prop][entityProp] = toPlainObject(propsCopy[prop][entityProp]);
+    if (isObject(props[prop])) {
+      for (const entityProp in props[prop]) {
+        propsCopy[prop] = { [entityProp]: {} };
+        propsCopy[prop][entityProp] = toPlainObject(props[prop][entityProp]);
       }
     }
-    propsCopy[prop] = toPlainObject(propsCopy[prop]);
+    propsCopy[prop] = toPlainObject(props[prop]);
   }
   return deepCopy(propsCopy);
 };
