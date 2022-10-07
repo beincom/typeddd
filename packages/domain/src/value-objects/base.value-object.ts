@@ -1,5 +1,5 @@
 import { domainObjectToPlainObject } from '../utils';
-import { isFunction, isObject, isOwnerProperties } from '@typeddd/common';
+import { Freeze, isFunction, isObject, isOwnerProperties } from '@typeddd/common';
 
 export type Primitive = string | number | boolean;
 

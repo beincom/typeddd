@@ -38,5 +38,8 @@
     "@typeddd/common": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "reflect-metadata": "^0.1.13"
   }
 }
