@@ -69,11 +69,11 @@ async function getNextVersion() {
     process.exit(1);
   }
 
-  // const preid = options.preid ?? '';
-  // const prereleaseNumbers = versions
-  //   .filter((v) => v.startsWith(`${version}-${preid}.`))
-  //   .map((v) => Number(v.match(/\.(\d+)$/)?.[1]));
-  //   const lastPrereleaseNumber = Math.max(-1, ...prereleaseNumbers);
+  const preid = options.preid ?? '';
+  const prereleaseNumbers = versions
+    .filter((v) => v.startsWith(`${version}-${preid}.`))
+    .map((v) => Number(v.match(/\.(\d+)$/)?.[1]));
+  const lastPrereleaseNumber = Math.max(-1, ...prereleaseNumbers);
   // .${lastPrereleaseNumber + 1}
   return `${version}`;
 }
