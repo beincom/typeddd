@@ -1,18 +1,18 @@
 import { DeepPartial } from '@typeddd/common';
 import { BaseValueObject } from '../../value-objects';
 import { BaseEntity } from '../../entities/base.entity';
-import { FullProps, ID } from '../domain/entity.interfaces';
+import { EntityProps } from '../domain/entity.interfaces';
 
 export interface Command<Entity, EntityProps> {
   create(entity: Entity): Promise<Entity> | never;
-  update(id: ID<any>, entity: Entity): Promise<Entity> | never;
+  update(id: any, entity: Entity): Promise<Entity> | never;
   bulkCreate(entities: Entity[]): Promise<Entity[]> | never;
   bulkUpdate(entities: Entity[]): Promise<Entity[]> | never;
   remove(entities: Entity[]): Promise<boolean> | never;
   destroy(props: EntityProps): Promise<number> | never;
 }
 
-export type QueryParams<EntityProps> = DeepPartial<FullProps<any, EntityProps>>;
+export type QueryParams<Props> = DeepPartial<EntityProps<any, Props>>;
 
 export type OrderBy = 'DESC' | 'ASC';
 
@@ -38,7 +38,7 @@ export interface DataWithPaginationMeta<T> {
 
 export interface Query<Entity, EntityProps> {
   find(options: FindParams<EntityProps>): Promise<DataWithPaginationMeta<Entity[]>>;
-  findById(id: ID<any>): Promise<Entity> | never;
+  findById(id: any): Promise<Entity> | never;
   findOne(params: QueryParams<EntityProps>): Promise<Entity> | never;
 }
 
