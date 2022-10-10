@@ -3,27 +3,32 @@ import {
   CreatedAtValueObject,
   UpdatedAtValueObject,
   DateValueObject,
+  BaseValueObject,
 } from '../value-objects';
-import { FullProps, ID } from '../interfaces/domain';
+import { EntityProps } from '../interfaces/domain';
 import { ValueObjectFactory } from '../factories';
 import { domainObjectToPlainObject } from '../utils';
-import { deepCopy, isNull, isUndefined, deepEqual } from '@typeddd/common';
+import { isNull, isUndefined, deepEqual, RuntimeException } from '@typeddd/common';
 
-export abstract class BaseEntity<EntityIdProps, EntityProps> {
+export type ValueObject<T> = T extends BaseValueObject<any> ? T : any;
+
+export type CloneType<T> = T extends BaseEntity<any, any> ? T : any;
+
+export abstract class BaseEntity<Identity extends BaseValueObject<string | any>, Props> {
   /**
    * Override id if need
    */
-  protected abstract _id: ID<EntityIdProps>;
+  protected abstract _id: Identity;
 
-  private readonly _props: EntityProps;
+  private readonly _props: Props;
 
   private readonly _createdAt: CreatedAtValueObject;
 
   private readonly _updatedAt: UpdatedAtValueObject;
 
-  private readonly _deletedAt: UpdatedAtValueObject;
+  private readonly _deletedAt?: UpdatedAtValueObject;
 
-  protected constructor(entityProps: FullProps<EntityIdProps, EntityProps>) {
+  protected constructor(entityProps: EntityProps<Identity, Props>) {
     const { id, props, createdAt, updatedAt, deletedAt } = entityProps;
 
     this.id = id;
@@ -43,7 +48,7 @@ export abstract class BaseEntity<EntityIdProps, EntityProps> {
 
   public abstract validate(): void | never;
 
-  public static isDomainEntity<Entity extends BaseEntity<unknown, unknown>>(
+  public static isDomainEntity<Entity extends BaseEntity<any, any>>(
     entity: Entity,
   ): entity is Entity {
     // eslint-disable-next-line no-prototype-builtins
@@ -63,7 +68,7 @@ export abstract class BaseEntity<EntityIdProps, EntityProps> {
     return plainProps as unknown as T;
   }
 
-  public equals(object?: BaseEntity<EntityIdProps, EntityProps>): boolean {
+  public equals(object?: BaseEntity<Identity, Props>): boolean {
     if (isNull(object) || isUndefined(object)) {
       return false;
     }
@@ -79,32 +84,40 @@ export abstract class BaseEntity<EntityIdProps, EntityProps> {
     return this.id ? deepEqual(this.id, object.id) : false;
   }
 
-  public get id(): ID<EntityIdProps> {
+  public get id(): Identity {
     return this._id;
   }
 
-  private set id(id: ID<EntityIdProps>) {
+  private set id(id: Identity) {
     this._id = id;
   }
 
-  public get props(): FullProps<EntityIdProps, EntityProps> {
-    const copyProps = deepCopy({
+  public get entityProps(): EntityProps<Identity, Props> {
+    const copyProps = {
       id: this._id,
       props: this._props,
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,
       deletedAt: this._deletedAt,
-    });
+    };
 
     return Object.freeze(copyProps);
   }
 
-  public clone(): BaseEntity<EntityIdProps, EntityProps> {
-    return (<T>(instance: T): T => {
-      const copy = new (instance.constructor as { new (): T })();
-      Object.assign(copy, deepCopy(instance));
-      return copy;
-    })(this);
+  public clone<T>(): CloneType<T> {
+    const prototype = Reflect.getPrototypeOf(this);
+
+    if (prototype) {
+      const argsCtor: EntityProps<Identity, Props> = {
+        id: this._id,
+        props: this._props,
+        createdAt: this._createdAt,
+        updatedAt: this._updatedAt,
+        deletedAt: this._deletedAt,
+      };
+      return Reflect.construct(prototype.constructor, [argsCtor]);
+    }
+    throw new RuntimeException(`Can't get prototype of entity`);
   }
 
   public get createdAt(): CreatedAtValueObject {

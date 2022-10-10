@@ -5,7 +5,7 @@ import {
   UpdatedAtValueObject,
   UUIDValueObject,
 } from '../../packages/domain/src/value-objects';
-import { FullProps } from '../../packages/domain/src/interfaces/domain';
+import { EntityProps } from '../../packages/domain/src/interfaces/domain';
 import { BaseEntity } from '../../packages/domain/src/entities/base.entity';
 import { isPlainObject } from '../../packages/common/src/utils/shared.utils';
 
@@ -14,13 +14,26 @@ type UserProps = {
   password: ValueObjectProps<string>;
 };
 
+export class UserId extends UUIDValueObject {
+  validate(props: ValueObjectProps<string>): void {}
+}
+
+export class GroupId extends UUIDValueObject {
+  validate(props: ValueObjectProps<string>): void {}
+}
+
+export interface UG {
+  userId: UserId;
+  groupId: GroupId;
+}
+
 type UserIdProps = {
-  userId: ValueObjectProps<string>;
-  groupId: ValueObjectProps<string>;
+  userId: UserId;
+  groupId: GroupId;
 };
 
-class UserComplexId extends ComplexIdValueObject<UserIdProps> {
-  public constructor(props: UserIdProps) {
+class UserComplexId extends ComplexIdValueObject<UG> {
+  public constructor(props: UG) {
     super(props);
   }
 
@@ -29,10 +42,10 @@ class UserComplexId extends ComplexIdValueObject<UserIdProps> {
   }
 }
 
-class UserComplexIdEntity extends BaseEntity<UserIdProps, UserProps> {
+class UserComplexIdEntity extends BaseEntity<UserComplexId, UserProps> {
   protected _id: UserComplexId;
 
-  public constructor(props: FullProps<UserIdProps, UserProps>) {
+  public constructor(props: EntityProps<UserComplexId, UserProps>) {
     super(props);
   }
 
@@ -44,7 +57,7 @@ class UserComplexIdEntity extends BaseEntity<UserIdProps, UserProps> {
 class UserStringIdEntity extends BaseEntity<UUIDValueObject, UserProps> {
   protected _id: UUIDValueObject;
 
-  public constructor(props: FullProps<UUIDValueObject, UserProps>) {
+  public constructor(props: EntityProps<UUIDValueObject, UserProps>) {
     super(props);
   }
 
@@ -55,12 +68,8 @@ class UserStringIdEntity extends BaseEntity<UUIDValueObject, UserProps> {
 
 const user = new UserComplexIdEntity({
   id: new UserComplexId({
-    userId: {
-      value: 'd88b10ef-eee3-4770-b20b-9df62445cd3e',
-    },
-    groupId: {
-      value: '1e557fe3-cacc-4915-8ce1-b50a2dcdcc44',
-    },
+    userId: new UserId('d88b10ef-eee3-4770-b20b-9df62445cd3e'),
+    groupId: new GroupId('1e557fe3-cacc-4915-8ce1-b50a2dcdcc44'),
   }),
   props: {
     username: {
@@ -129,8 +138,7 @@ describe('Entity', () => {
 
   describe('props', () => {
     it('should return read only props', () => {
-      const props = user.props;
-
+      const props = user.entityProps;
       try {
         props.id = null;
       } catch (ex) {
@@ -147,6 +155,30 @@ describe('Entity', () => {
         props: { username: { value: 'Tanjiro' }, password: { value: '123456' } },
         createdAt: { props: { value: new Date('2022-10-06T08:54:55.584Z') } },
         updatedAt: { props: { value: new Date('2022-10-06T08:54:55.584Z') } },
+        deletedAt: null,
+      });
+    });
+  });
+
+  describe('clone', () => {
+    it('should return new instance', () => {
+      user.id;
+      const plainObject = user.clone<UserComplexIdEntity>();
+
+      console.log(plainObject.entityProps);
+
+      expect(plainObject).toBeInstanceOf(UserComplexIdEntity);
+      expect(isPlainObject(plainObject)).toBe(true);
+
+      expect(plainObject).toEqual({
+        id: {
+          userId: 'd88b10ef-eee3-4770-b20b-9df62445cd3e',
+          groupId: '1e557fe3-cacc-4915-8ce1-b50a2dcdcc44',
+        },
+        username: 'Tanjiro',
+        password: '123456',
+        createdAt: new Date('2022-10-06T08:54:55.584Z'),
+        updatedAt: new Date('2022-10-06T08:54:55.584Z'),
         deletedAt: null,
       });
     });

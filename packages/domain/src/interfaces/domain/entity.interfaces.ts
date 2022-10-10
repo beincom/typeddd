@@ -1,23 +1,18 @@
 import type {
-  IdValueObject,
   CreatedAtValueObject,
   UpdatedAtValueObject,
   DeletedAtValueObject,
-  ComplexIdValueObject,
-  UUIDValueObject,
 } from '../../value-objects';
 
-export type ID<T> = T extends UUIDValueObject ? T : ComplexIdValueObject<T>;
-
 export interface BaseEntityProps<T> {
-  id: ID<T>;
+  id: T;
   createdAt: CreatedAtValueObject;
   updatedAt: UpdatedAtValueObject;
   deletedAt: DeletedAtValueObject;
 }
 
-export interface FullProps<T, V> {
-  id: ID<T>;
+export interface EntityProps<T, V> {
+  id: T;
   props: V;
   createdAt: CreatedAtValueObject;
   updatedAt: UpdatedAtValueObject;
