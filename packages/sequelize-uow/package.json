@@ -29,6 +29,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@typeddd/common": "^0.0.4",
     "cls-hooked": "^4.2.2",
     "sequelize": "^6.25.2",
     "uuid": "^9.0.0"
