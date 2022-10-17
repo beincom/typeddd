@@ -1,1 +1,2 @@
-// TODO: The feature to be developed in the future
+export * from './domain-event.builder';
+export * from './domain-event';

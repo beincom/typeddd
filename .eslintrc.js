@@ -33,7 +33,6 @@ module.exports = {
     ],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
-    '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/consistent-type-assertions': 'error',
     '@typescript-eslint/no-array-constructor': 'error',
     '@typescript-eslint/no-empty-function': 'error',
@@ -47,6 +46,7 @@ module.exports = {
     '@typescript-eslint/type-annotation-spacing': 'error',
     '@typescript-eslint/array-type': 'error',
     '@typescript-eslint/no-unnecessary-qualifier': 'error',
+    '@typescript-eslint/adjacent-overload-signatures': 'off',
     '@typescript-eslint/no-unnecessary-type-arguments': 'off', // disabled as it started to be buggy
     '@typescript-eslint/quotes': [
       'error',
