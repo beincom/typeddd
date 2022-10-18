@@ -1,0 +1,1 @@
+# `@nest-domain-event`

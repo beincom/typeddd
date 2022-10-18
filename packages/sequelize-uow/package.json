@@ -1,0 +1,40 @@
+{
+  "name": "@typeddd/sequelize-uow",
+  "version": "0.0.2",
+  "description": "Domain Driven Design (@sequelize-uow package)",
+  "keywords": [
+    "typescript",
+    "ddd",
+    "domain driven design",
+    "nodejs"
+  ],
+  "author": "The Van <thevan@evol.vn>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Beincomm/typeddd.git"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "copy": "node ../../scripts/build.js",
+    "build": "yarn clean && yarn compile && yarn copy"
+  },
+  "bugs": {
+    "url": "https://github.com/Beincomm/typeddd/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@typeddd/common": "^0.0.4",
+    "cls-hooked": "^4.2.2",
+    "sequelize": "^6.25.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/cls-hooked": "^4.3.3"
+  }
+}
