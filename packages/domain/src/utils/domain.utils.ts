@@ -1,5 +1,5 @@
+import type { BaseEntity } from '../entities';
 import { BaseValueObject } from '../value-objects';
-import type { BaseEntity } from '../entities/base.entity';
 import { deepCopy, isObject, isOwnerProperties } from '@typeddd/common';
 
 export const isEntity = (obj: any): obj is BaseEntity<any, any> => {

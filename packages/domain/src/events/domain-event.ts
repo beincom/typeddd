@@ -1,11 +1,12 @@
 import { UUIDValueObject } from '../value-objects';
+import { IDomainEvent } from '../interfaces/domain';
 import { isEmptyArray, isUndefined } from '@typeddd/common';
-import { IDomainEvent } from '../interfaces/domain/event.interfaces';
 
 export type BaseDomainEventProps = {
   eventId: string;
   eventName: string;
   aggregateId: string;
+  requestId: string;
   occurredAt?: number;
   version?: number;
   order?: number;
@@ -20,85 +21,48 @@ export abstract class DomainEvent<T> implements IDomainEvent<T> {
 
   protected abstract _eventName: string;
 
-  private _payload: T;
+  public payload: T;
 
-  private _aggregateId: string;
+  public aggregateId: string;
 
-  private _occurredAt: number;
+  public requestId: string;
 
-  private _version: number;
+  public occurredAt: number;
 
-  private _order: number;
+  public version: number;
 
-  public constructor();
-  public constructor(props: DomainEventProps<T>);
-  public constructor(...args: any[]) {
-    if (!isUndefined(args) && !isEmptyArray(args)) {
+  public order: number;
+
+  protected constructor();
+  protected constructor(props: DomainEventProps<T>);
+  protected constructor(...args: any[]) {
+    if (!isUndefined(args) || !isEmptyArray(args)) {
       const props: DomainEventProps<T> = args[0];
       this.eventId = UUIDValueObject.generate().value;
-      this.eventName = props.eventName;
-      this._aggregateId = props.aggregateId;
-      this._payload = props.payload;
-      this._occurredAt = props.occurredAt || Date.now();
-      if (props.version) {
-        this._version = props.version;
+      this.eventName = props?.eventName || Reflect.get(this, 'constructor').name;
+      this.aggregateId = props?.aggregateId;
+      this.requestId = props?.requestId;
+      this.payload = props?.payload;
+      this.occurredAt = props?.occurredAt || Date.now();
+      if (props?.version) {
+        this.version = props.version;
       }
     }
   }
 
-  public get eventId(): string {
+  public get eventId() {
     return this._eventId;
   }
 
-  public get eventName(): string {
+  public set eventId(id: string) {
+    this._eventId = id;
+  }
+
+  public get eventName() {
     return this._eventName;
   }
 
-  public get payload(): T {
-    return this._payload;
-  }
-
-  public set payload(value: T) {
-    this._payload = value;
-  }
-
-  public get aggregateId(): string {
-    return this._aggregateId;
-  }
-
-  public get occurredAt(): number {
-    return this._occurredAt;
-  }
-
-  public get version(): number {
-    return this._version;
-  }
-
-  public get order(): number {
-    return this._order;
-  }
-
-  public set eventId(value: string) {
-    this._eventId = value;
-  }
-
-  public set eventName(value: string) {
-    this._eventName = value;
-  }
-
-  public set aggregateId(value: string) {
-    this._aggregateId = value;
-  }
-
-  public set occurredAt(value: number) {
-    this._occurredAt = value;
-  }
-
-  public set version(value: number) {
-    this._version = value;
-  }
-
-  public set order(value: number) {
-    this._order = value;
+  public set eventName(name: string) {
+    this._eventName = name;
   }
 }

@@ -1,5 +1,5 @@
-import { RuntimeException } from '@typeddd/common';
 import { DomainEvent } from './domain-event';
+import { RuntimeException } from '@typeddd/common';
 
 export class DomainEventBuilder<T extends DomainEvent<Payload>, Payload> {
   private instance: T;
@@ -50,17 +50,14 @@ export class DomainEventBuilder<T extends DomainEvent<Payload>, Payload> {
     return this;
   }
 
+  public setRequestId(id: string) {
+    this.instance.requestId = id;
+    return this;
+  }
+
   public static init<T extends DomainEvent<Payload>, Payload>(
     ctor: new (...args: any[]) => T,
   ): DomainEventBuilder<T, Payload> {
     return new DomainEventBuilder<T, Payload>().init(ctor);
   }
-}
-
-export type UserCreatedEventPayload = {
-  userId: number;
-};
-export class UserCreatedEvent extends DomainEvent<UserCreatedEventPayload> {
-  public _eventId: string;
-  public _eventName: string;
 }

@@ -12,4 +12,6 @@ export interface IDomainEvent<T> {
   version: number;
 
   order: number;
+
+  requestId: string;
 }
