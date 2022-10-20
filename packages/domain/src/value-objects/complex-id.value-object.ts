@@ -1,6 +1,6 @@
-import { BaseValueObject, ValueObjectProps } from './base.value-object';
+import { ValueObject, ValueObjectProps } from './value-object';
 
-export abstract class ComplexIdValueObject<T> extends BaseValueObject<T> {
+export abstract class ComplexIdValueObject<T> extends ValueObject<T> {
   protected constructor(complexId: ValueObjectProps<T>) {
     super(complexId);
   }

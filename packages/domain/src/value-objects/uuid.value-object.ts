@@ -1,6 +1,6 @@
 import { IdValueObject } from './id.value-object';
-import type { ValueObjectProps } from './base.value-object';
-import { isUUID, IllegalArgumentException, generateUUID } from '@typeddd/common';
+import type { ValueObjectProps } from './value-object';
+import { isUUID, IllegalArgumentException, generateUUID } from '@beincom/common';
 
 export class UUIDValueObject extends IdValueObject {
   public constructor(id: string) {

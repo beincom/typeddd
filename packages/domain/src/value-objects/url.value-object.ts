@@ -1,7 +1,7 @@
-import { isURL, IllegalArgumentException } from '@typeddd/common';
-import { BaseValueObject, ValueObjectProps } from './base.value-object';
+import { isURL, IllegalArgumentException } from '@beincom/common';
+import { ValueObject, ValueObjectProps } from './value-object';
 
-export class UrlValueObject extends BaseValueObject<string> {
+export class UrlValueObject extends ValueObject<string> {
   public constructor(url: string) {
     super({
       value: url,

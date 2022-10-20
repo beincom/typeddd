@@ -1,6 +1,6 @@
 import { UUIDValueObject } from '../value-objects';
 import { IDomainEvent } from '../interfaces/domain';
-import { isEmptyArray, isUndefined } from '@typeddd/common';
+import { isEmptyArray, isUndefined } from '@beincom/common';
 
 export type BaseDomainEventProps = {
   eventId: string;

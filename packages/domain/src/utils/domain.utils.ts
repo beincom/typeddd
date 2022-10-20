@@ -1,17 +1,17 @@
-import type { BaseEntity } from '../entities';
-import { BaseValueObject } from '../value-objects';
-import { deepCopy, isObject, isOwnerProperties } from '@typeddd/common';
+import type { Entity } from '../entities';
+import { ValueObject } from '../value-objects';
+import { deepCopy, isObject, isOwnerProperties } from '@beincom/common';
 
-export const isEntity = (obj: any): obj is BaseEntity<any, any> => {
+export const isEntity = (obj: any): obj is Entity<any, any> => {
   return (
     obj &&
     isOwnerProperties(obj, ['toObject', 'id']) &&
-    BaseValueObject.isValueObject((obj as BaseEntity<any, any>).id)
+    ValueObject.isValueObject((obj as Entity<any, any>).id)
   );
 };
 
 export const toPlainObject = (item: any) => {
-  if (BaseValueObject.isValueObject(item)) {
+  if (ValueObject.isValueObject(item)) {
     return item.value;
   }
   if (isEntity(item)) {

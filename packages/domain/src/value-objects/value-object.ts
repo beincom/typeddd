@@ -1,5 +1,5 @@
 import { domainObjectToPlainObject } from '../utils';
-import { isFunction, isObject, isOwnerProperties } from '@typeddd/common';
+import { isFunction, isObject, isOwnerProperties } from '@beincom/common';
 
 export type Primitive = string | number | boolean;
 
@@ -8,7 +8,7 @@ export interface DomainPrimitive<T extends Primitive | Date> {
 }
 export type ValueObjectProps<T> = T extends Primitive | Date ? DomainPrimitive<T> : T;
 
-export abstract class BaseValueObject<T> {
+export abstract class ValueObject<T> {
   protected readonly props: ValueObjectProps<T>;
 
   protected constructor(props: ValueObjectProps<T>) {
@@ -16,8 +16,8 @@ export abstract class BaseValueObject<T> {
     this.props = props;
   }
 
-  public static isValueObject(obj: unknown): obj is BaseValueObject<unknown> {
-    return obj instanceof BaseValueObject || (obj && isOwnerProperties(obj, ['value']));
+  public static isValueObject(obj: unknown): obj is ValueObject<unknown> {
+    return obj instanceof ValueObject || (obj && isOwnerProperties(obj, ['value']));
   }
 
   public abstract validate(props: ValueObjectProps<T>): void | never;

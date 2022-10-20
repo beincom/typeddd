@@ -3,18 +3,16 @@ import {
   CreatedAtValueObject,
   UpdatedAtValueObject,
   DateValueObject,
-  BaseValueObject,
+  ValueObject,
 } from '../value-objects';
 import { EntityProps } from '../interfaces/domain';
 import { ValueObjectFactory } from '../factories';
 import { domainObjectToPlainObject } from '../utils';
-import { isNull, isUndefined, deepEqual, RuntimeException } from '@typeddd/common';
+import { isNull, isUndefined, deepEqual, RuntimeException } from '@beincom/common';
 
-export type ValueObject<T> = T extends BaseValueObject<any> ? T : any;
+export type CloneType<T> = T extends Entity<any, any> ? T : any;
 
-export type CloneType<T> = T extends BaseEntity<any, any> ? T : any;
-
-export abstract class BaseEntity<Identity extends BaseValueObject<string | any>, Props> {
+export abstract class Entity<Identity extends ValueObject<string | any>, Props> {
   /**
    * Override id if need
    */
@@ -48,11 +46,9 @@ export abstract class BaseEntity<Identity extends BaseValueObject<string | any>,
 
   public abstract validate(): void | never;
 
-  public static isDomainEntity<Entity extends BaseEntity<any, any>>(
-    entity: Entity,
-  ): entity is Entity {
+  public static isDomainEntity<E extends Entity<any, any>>(entity: E): entity is E {
     // eslint-disable-next-line no-prototype-builtins
-    return BaseEntity.prototype.isPrototypeOf(entity);
+    return Entity.prototype.isPrototypeOf(entity);
   }
 
   public toObject<T>(): T {
@@ -68,7 +64,7 @@ export abstract class BaseEntity<Identity extends BaseValueObject<string | any>,
     return plainProps as unknown as T;
   }
 
-  public equals(object?: BaseEntity<Identity, Props>): boolean {
+  public equals(object?: Entity<Identity, Props>): boolean {
     if (isNull(object) || isUndefined(object)) {
       return false;
     }
@@ -77,7 +73,7 @@ export abstract class BaseEntity<Identity extends BaseValueObject<string | any>,
       return true;
     }
 
-    if (!BaseEntity.isDomainEntity(object)) {
+    if (!Entity.isDomainEntity(object)) {
       return false;
     }
 

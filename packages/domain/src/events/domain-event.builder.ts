@@ -1,5 +1,5 @@
 import { DomainEvent } from './domain-event';
-import { RuntimeException } from '@typeddd/common';
+import { RuntimeException } from '@beincom/common';
 
 export class DomainEventBuilder<T extends DomainEvent<Payload>, Payload> {
   private instance: T;

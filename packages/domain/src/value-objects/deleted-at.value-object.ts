@@ -1,6 +1,6 @@
 import { DateValueObject } from './date.value-object';
 import { ValueObjectProps } from '../value-objects';
-import { isNull, isUndefined } from '@typeddd/common';
+import { isNull, isUndefined } from '@beincom/common';
 
 export class DeletedAtValueObject extends DateValueObject {
   public constructor(date = new Date()) {

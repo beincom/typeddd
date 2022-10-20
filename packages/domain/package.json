@@ -1,5 +1,5 @@
 {
-  "name": "@typeddd/domain",
+  "name": "@beincom/domain",
   "version": "0.0.5",
   "description": "Domain Driven Design (@domain package)",
   "keywords": [
@@ -29,13 +29,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@typeddd/common": "~0.0.5"
+    "@beincom/common": "~0.0.5"
   },
   "peerDependencies": {
-    "@typeddd/common": "~0.0.5"
+    "@beincom/common": "~0.0.5"
   },
   "peerDependenciesMeta": {
-    "@typeddd/common": {
+    "@beincom/common": {
       "optional": true
     }
   }

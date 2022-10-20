@@ -1,5 +1,5 @@
 {
-  "name": "@typeddd/sequelize-uow",
+  "name": "@beincom/sequelize-uow",
   "version": "0.0.5",
   "description": "Domain Driven Design (@sequelize-uow package)",
   "keywords": [
@@ -29,7 +29,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@typeddd/common": "^0.0.5",
+    "@beincom/common": "^0.0.5",
     "cls-hooked": "^4.2.2",
     "sequelize": "^6.25.2",
     "uuid": "^9.0.0"

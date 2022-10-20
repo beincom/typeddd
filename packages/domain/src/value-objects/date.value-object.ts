@@ -1,8 +1,8 @@
-import { BaseValueObject } from './base.value-object';
-import type { ValueObjectProps } from './base.value-object';
-import { isDate, IllegalArgumentException } from '@typeddd/common';
+import { ValueObject } from './value-object';
+import type { ValueObjectProps } from './value-object';
+import { isDate, IllegalArgumentException } from '@beincom/common';
 
-export class DateValueObject extends BaseValueObject<Date> {
+export class DateValueObject extends ValueObject<Date> {
   public constructor(date: Date) {
     super({ value: date });
   }

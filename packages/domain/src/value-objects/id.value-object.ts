@@ -1,6 +1,6 @@
-import { BaseValueObject, ValueObjectProps } from './base.value-object';
+import { ValueObject, ValueObjectProps } from './value-object';
 
-export abstract class IdValueObject extends BaseValueObject<string> {
+export abstract class IdValueObject extends ValueObject<string> {
   protected constructor(id: string) {
     super({ value: id });
   }

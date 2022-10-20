@@ -1,4 +1,4 @@
-import { Final } from '@typeddd/common';
+import { Final } from '@beincom/common';
 import { AggregateRoot } from '../entities';
 import { DomainEvent } from './domain-event';
 import { LoggerPort } from '../interfaces/ports';

@@ -1,7 +1,7 @@
 import { Injectable, Type } from '@nestjs/common';
 import { Module } from '@nestjs/core/injector/module';
 import { EVENTS_HANDLER_METADATA } from '../constants';
-import { DomainEventHandler } from '@typeddd/domain/src/events';
+import { DomainEventHandler } from '@beincom/domain/src/events';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { ModulesContainer } from '@nestjs/core/injector/modules-container';
 

@@ -1,4 +1,4 @@
-import { BaseException, Response } from '@typeddd/common';
+import { BaseException, Response } from '@beincom/common';
 
 export class DomainException extends BaseException {
   public constructor(code: string, response: Response) {

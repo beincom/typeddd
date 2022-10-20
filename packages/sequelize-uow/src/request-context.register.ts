@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { generateUUID } from '@typeddd/common';
+import { generateUUID } from '@beincom/common';
 import { IRequest, IResponse, RequestContext } from './request-context';
 
 export function registerRequestContext(

@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import { UnitOfWork } from '../unit-of-work';
-import { RuntimeException } from '@typeddd/common';
+import { RuntimeException } from '@beincom/common';
 import { TransactionOptions } from 'sequelize/types/transaction';
 import { RequestContext } from '../request-context';
 
