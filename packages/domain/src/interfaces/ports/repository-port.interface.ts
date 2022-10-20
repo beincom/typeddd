@@ -1,6 +1,5 @@
 import { DeepPartial } from '@typeddd/common';
-import { BaseValueObject } from '../../value-objects';
-import { BaseEntity } from '../../entities/base.entity';
+import { BaseEntity } from '../../entities/';
 import { EntityProps } from '../domain/entity.interfaces';
 
 export interface Command<Entity, EntityProps> {
@@ -42,8 +41,6 @@ export interface Query<Entity, EntityProps> {
   findOne(params: QueryParams<EntityProps>): Promise<Entity> | never;
 }
 
-export interface RepositoryPort<
-  Entity extends BaseEntity<any, any>,
-  EntityProps extends BaseValueObject<any>,
-> extends Command<Entity, EntityProps>,
+export interface RepositoryPort<Entity extends BaseEntity<any, EntityProps>, EntityProps>
+  extends Command<Entity, EntityProps>,
     Query<Entity, EntityProps> {}
