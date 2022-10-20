@@ -1,17 +1,14 @@
 import { isObject, isString } from '../utils/shared.utils';
 import type { Cause, Response, ExceptionResponse } from '../types';
 
-export class BaseException extends Error {
-  public cause: Cause;
+export abstract class BaseException extends Error {
+  abstract code: string;
 
-  constructor(private readonly id: string, private readonly response: Response) {
+  constructor(readonly response: Response, readonly cause?: Cause) {
     super();
 
     this.name = this.constructor.name;
-
-    if (this.response instanceof Error) {
-      this.cause = this.response;
-    }
+    Error.captureStackTrace(this, this.constructor);
 
     this.buildMessage();
   }
@@ -31,9 +28,5 @@ export class BaseException extends Error {
 
   public getResponse(): ExceptionResponse {
     return this.response;
-  }
-
-  public getId(): string {
-    return this.id;
   }
 }

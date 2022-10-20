@@ -9,19 +9,18 @@ export function Transactional<T>(trxOptions?: TransactionOptions): MethodDecorat
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (this: T, ...args: any[]) {
-      const connection = (this as any).connection;
+      const requestContext = RequestContext.currentContext();
+      const { connection, req } = requestContext;
 
       if (!((connection as unknown) instanceof Sequelize)) {
         throw new RuntimeException(
-          '@Transactional() decorator can only be applied to methods of classes with `connection: Sequelize` property`',
+          '@Transactional() decorator can only be applied to request context with sequelize connection`',
         );
       }
       const uow = UnitOfWork.getInstance(connection);
 
-      const requestContext = RequestContext.currentContext();
-
-      if (requestContext) {
-        return uow.work(requestContext.req.id, () => originalMethod.apply(this, args), trxOptions);
+      if (req.id) {
+        return uow.work(req.id, () => originalMethod.apply(this, args), trxOptions);
       }
       return originalMethod.apply(this, args);
     };
