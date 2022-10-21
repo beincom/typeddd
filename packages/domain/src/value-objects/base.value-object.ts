@@ -1,5 +1,5 @@
 import { domainObjectToPlainObject } from '../utils';
-import { isFunction, isObject, isOwnerProperties } from '@typeddd/common';
+import { isFunction, isObject, isOwnerProperties, deepEqual } from '@typeddd/common';
 
 export type Primitive = string | number | boolean;
 
@@ -36,7 +36,7 @@ export abstract class BaseValueObject<T> {
     if (props === undefined) {
       return false;
     }
-    return JSON.stringify(props) === JSON.stringify(props);
+    return deepEqual(this.props, props);
   }
 
   private isDomainPrimitive(obj: unknown): obj is DomainPrimitive<T & (Primitive | Date)> {
