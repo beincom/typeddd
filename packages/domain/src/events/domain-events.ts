@@ -38,10 +38,9 @@ export class DomainEvents {
     requestId?: string,
   ): Promise<void> {
     const aggregate = this.findAggregateByID(id);
-
     if (aggregate) {
       logger.debug(
-        `[${aggregate.domainEvents.map((event) => event.eventName)}] published ${
+        `[${aggregate.domainEvents.map((event) => Reflect.getPrototypeOf(event))}] published ${
           aggregate.id.value
         }`,
       );
@@ -78,8 +77,9 @@ export class DomainEvents {
       const handlers: DomainEventHandler[] = this.subscribers.get(eventName) || [];
       await Promise.all(
         handlers.map((handler) => {
+          const prototype = Reflect.getPrototypeOf(event);
           logger.debug(
-            `[${handler.constructor.name}] handling ${event.eventName} ${event.aggregateId}`,
+            `[${handler.constructor.name}] handling ${prototype} ${event.eventId} ${event.aggregateId}`,
           );
           return handler.handle(event);
         }),

@@ -3,8 +3,6 @@ export interface IDomainEvent<T> {
 
   eventId: string;
 
-  eventName: string;
-
   aggregateId: string;
 
   occurredAt: number;

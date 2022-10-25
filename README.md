@@ -10,10 +10,10 @@ This package support to build a complex application with th domain driven design
 ## Install
 ```shell
 #npm
-npm i --save @typeddd/common @typeddd/domain  @typeddd/infrastructure reflect-metadata
+npm i --save @beincom/common @beincom/domain  @beincom/infrastructure reflect-metadata
 
 #yarn
-yarn add @typeddd/common @typeddd/domain  @typeddd/infrastructure reflect-metadata
+yarn add @beincom/common @beincom/domain  @beincom/infrastructure reflect-metadata
 ```
 ## Getting started
 - To check out the [guide](README.MD)

@@ -4,7 +4,6 @@ import { isEmptyArray, isUndefined } from '@beincom/common';
 
 export type BaseDomainEventProps = {
   eventId: string;
-  eventName: string;
   aggregateId: string;
   requestId: string;
   occurredAt?: number;
@@ -18,8 +17,6 @@ export type DomainEventProps<T> = BaseDomainEventProps & {
 
 export abstract class DomainEvent<T> implements IDomainEvent<T> {
   protected abstract _eventId: string;
-
-  protected abstract _eventName: string;
 
   public payload: T;
 
@@ -39,7 +36,6 @@ export abstract class DomainEvent<T> implements IDomainEvent<T> {
     if (!isUndefined(args) || !isEmptyArray(args)) {
       const props: DomainEventProps<T> = args[0];
       this.eventId = UUIDValueObject.generate().value;
-      this.eventName = props?.eventName || Reflect.get(this, 'constructor').name;
       this.aggregateId = props?.aggregateId;
       this.requestId = props?.requestId;
       this.payload = props?.payload;
@@ -56,13 +52,5 @@ export abstract class DomainEvent<T> implements IDomainEvent<T> {
 
   public set eventId(id: string) {
     this._eventId = id;
-  }
-
-  public get eventName() {
-    return this._eventName;
-  }
-
-  public set eventName(name: string) {
-    this._eventName = name;
   }
 }

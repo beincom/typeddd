@@ -11,22 +11,19 @@ export const isEntity = (obj: any): obj is Entity<any, any> => {
 };
 
 export const toPlainObject = (item: any) => {
+  if (Array.isArray(item)) {
+    return item.map((i) => toPlainObject(i));
+  }
+
   if (ValueObject.isValueObject(item)) {
     return item.value;
   }
+
   if (isEntity(item)) {
     return item.toObject();
   }
-  return item;
-};
 
-const forkAssign = (source: any, readOnlyProperty: any, value: any): any => {
-  Object.defineProperties(source, {
-    [readOnlyProperty]: {
-      value,
-      writable: true,
-    },
-  });
+  return item;
 };
 
 export const domainObjectToPlainObject = (props: any) => {

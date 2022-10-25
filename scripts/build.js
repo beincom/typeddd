@@ -49,7 +49,7 @@ async function getNextVersion() {
   const versions = [];
 
   try {
-    const versionString = execSync(`npm show @typeddd/domain versions --json`, {
+    const versionString = execSync(`npm show @beincom/domain versions --json`, {
       encoding: 'utf8',
       stdio: 'pipe',
     });
@@ -86,7 +86,7 @@ async function getNextVersion() {
     pkgJson.version = nextVersion;
 
     for (const dep of Object.keys(pkgJson.dependencies ?? {})) {
-      if (dep.startsWith('@typeddd/') || dep === 'typeddd') {
+      if (dep.startsWith('@beincom/') || dep === 'typeddd') {
         const prefix = pkgJson.dependencies[dep].startsWith('^')
           ? '^'
           : pkgJson.dependencies[dep].startsWith('~')
@@ -97,7 +97,7 @@ async function getNextVersion() {
     }
 
     for (const dep of Object.keys(pkgJson.peerDependencies ?? {})) {
-      if (dep.startsWith('@typeddd/') || dep === 'typeddd') {
+      if (dep.startsWith('@beincom/') || dep === 'typeddd') {
         pkgJson.peerDependencies[dep] = '~' + nextVersion;
       }
     }
@@ -114,7 +114,7 @@ async function getNextVersion() {
 
     for (const dep of Object.keys(pkgJson.dependencies ?? {})) {
       if (
-        dep.startsWith('@typeddd/') ||
+        dep.startsWith('@beincom/') ||
         (dep === 'typeddd' && pkgJson.dependencies[dep].startsWith('^'))
       ) {
         pkgJson.dependencies[dep] = '~' + version;
