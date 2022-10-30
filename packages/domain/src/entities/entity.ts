@@ -1,44 +1,42 @@
-import {
-  DeletedAtValueObject,
-  CreatedAtValueObject,
-  UpdatedAtValueObject,
-  DateValueObject,
-  ValueObject,
-} from '../value-objects';
 import { EntityProps } from '../interfaces/domain';
-import { ValueObjectFactory } from '../factories';
-import { domainObjectToPlainObject } from '../utils';
-import { isNull, isUndefined, deepEqual, RuntimeException } from '@beincom/common';
+import { valueObjectToPlain } from '../utils/domain.utils';
+import { isNull, isUndefined, deepEqual, DeepPartial, clone } from '@beincom/common';
+import { ID, DateVO, CreatedAt, UpdatedAt, DeletedAt, ValueObject } from '../value-objects';
 
-export type CloneType<T> = T extends Entity<any, any> ? T : any;
+export type ValueObjects<T> = {
+  [index: string]: ValueObject<T> | ValueObject<T>[];
+};
 
-export abstract class Entity<Identity extends ValueObject<string | any>, Props> {
-  /**
-   * Override id if need
-   */
+export type EntityProperties<T> = {
+  [K in keyof T]:
+    | ValueObject<T>
+    | ValueObject<T>[]
+    | ValueObjects<T>
+    | DeepPartial<EntityProperties<T>>;
+};
+
+export abstract class Entity<
+  Identity extends ID = ID,
+  Props extends EntityProperties<unknown> = EntityProperties<unknown>,
+> {
   protected abstract _id: Identity;
 
   private readonly _props: Props;
 
-  private readonly _createdAt: CreatedAtValueObject;
+  private readonly _createdAt: CreatedAt;
 
-  private readonly _updatedAt: UpdatedAtValueObject;
+  private readonly _updatedAt: UpdatedAt;
 
-  private readonly _deletedAt?: UpdatedAtValueObject;
+  private readonly _deletedAt?: DeletedAt;
 
   protected constructor(entityProps: EntityProps<Identity, Props>) {
     const { id, props, createdAt, updatedAt, deletedAt } = entityProps;
 
     this.id = id;
-
-    const nowValue = ValueObjectFactory.create<DateValueObject, Date>(DateValueObject, new Date());
-
-    this._createdAt = createdAt || CreatedAtValueObject.fromPrototype(nowValue);
-
-    this._updatedAt = updatedAt || UpdatedAtValueObject.fromPrototype(nowValue);
-
-    this._deletedAt = deletedAt || null;
-
+    const nowValue = new DateVO(new Date());
+    this._createdAt = createdAt || CreatedAt.fromPrototype(nowValue);
+    this._updatedAt = updatedAt || UpdatedAt.fromPrototype(nowValue);
+    this._deletedAt = deletedAt || new DeletedAt(null);
     this._props = props;
 
     this.validate();
@@ -53,15 +51,14 @@ export abstract class Entity<Identity extends ValueObject<string | any>, Props> 
 
   public toObject<T>(): T {
     const result = {
-      id: this._id.value,
+      id: this._id,
       ...this._props,
-      createdAt: this._createdAt.value,
-      updatedAt: this._updatedAt.value,
-      deletedAt: this._deletedAt?.value || null,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      deletedAt: this._deletedAt || null,
     };
-    const plainProps = domainObjectToPlainObject(result);
 
-    return plainProps as unknown as T;
+    return valueObjectToPlain<T>(result) as unknown as T;
   }
 
   public equals(object?: Entity<Identity, Props>): boolean {
@@ -84,7 +81,7 @@ export abstract class Entity<Identity extends ValueObject<string | any>, Props> 
     return this._id;
   }
 
-  private set id(id: Identity) {
+  protected set id(id: Identity) {
     this._id = id;
   }
 
@@ -100,31 +97,27 @@ export abstract class Entity<Identity extends ValueObject<string | any>, Props> 
     return Object.freeze(copyProps);
   }
 
-  public clone<T>(): CloneType<T> {
-    const prototype = Reflect.getPrototypeOf(this);
+  public clone(): this {
+    const argsCtor: EntityProps<Identity, Props> = {
+      id: this._id,
+      props: this._props,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      deletedAt: this._deletedAt,
+    };
 
-    if (prototype) {
-      const argsCtor: EntityProps<Identity, Props> = {
-        id: this._id,
-        props: this._props,
-        createdAt: this._createdAt,
-        updatedAt: this._updatedAt,
-        deletedAt: this._deletedAt,
-      };
-      return Reflect.construct(prototype.constructor, [argsCtor]);
-    }
-    throw new RuntimeException(`Can't get prototype of entity`);
+    return clone(this, argsCtor);
   }
 
-  public get createdAt(): CreatedAtValueObject {
+  public get createdAt(): CreatedAt {
     return this._createdAt;
   }
 
-  public get updatedAt(): UpdatedAtValueObject {
+  public get updatedAt(): UpdatedAt {
     return this._updatedAt;
   }
 
-  public get deletedAt(): DeletedAtValueObject {
+  public get deletedAt(): DeletedAt {
     return this._deletedAt;
   }
 }

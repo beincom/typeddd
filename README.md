@@ -114,7 +114,7 @@ Thank you for document [4lessandrodev](https://github.com/4lessandrodev)
 - Can have specific query methods if needed (like `FindByName()` etc.)
 - Do not use lazy loading, instead use eager loading (use Include(...) in Entity Framework), else you can face "N+1 problem"s and excessive number of queries sent to DB
 - Can have specific methods that only load some of the columns from a table
-- Repository add/update/remove operation should commit to DB by itself (call Entity Framework ...Context.SaveChanges() at the end), because aggregate operations should be ACID transactions
+- Repository add/update/remove operation should commit to DB by itself (call Entity Framework ...AsyncContext.SaveChanges() at the end), because aggregate operations should be ACID transactions
 - Repository interface sits inside Core domain layer, but implementations are inside Infrastructure layer
 - Repositories are not used inside the domain models (entities, value objects, aggregates)
 

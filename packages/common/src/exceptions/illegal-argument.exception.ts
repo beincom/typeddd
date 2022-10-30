@@ -3,7 +3,8 @@ import { ExceptionId } from '../enums';
 import { BaseException } from './base.exception';
 
 export class IllegalArgumentException extends BaseException {
-  public constructor(response: string | UnknownRecord, id = ExceptionId.ILLEGAL_ARGUMENT) {
-    super(id, response);
+  code: string = ExceptionId.ILLEGAL_ARGUMENT;
+  public constructor(response: string | UnknownRecord) {
+    super(response);
   }
 }

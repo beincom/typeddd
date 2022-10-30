@@ -1,4 +1,4 @@
-export interface LoggerPort {
+export interface ILogger {
   log(message: string, ...meta: unknown[]): void;
   error(message: string, trace?: unknown, ...meta: unknown[]): void;
   warn(message: string, ...meta: unknown[]): void;

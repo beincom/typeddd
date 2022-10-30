@@ -4,14 +4,11 @@ import {
   ComplexIdValueObject,
   UpdatedAtValueObject,
   UUIDValueObject,
+  ValueObjectProperties,
 } from '../../packages/domain/src/value-objects';
 import { EntityProps } from '../../packages/domain/src/interfaces/domain';
 import { Entity } from '../../packages/domain/src/entities/entity';
-import { ValueObject } from '../../packages/domain';
-
-type UserProps = {
-  previewMembers: PreviewMembers;
-};
+import { ValueObject } from '../../packages/domain/src/value-objects';
 
 export type PreviewMemberProps = {
   userIds: UserId[];
@@ -38,14 +35,26 @@ type UserIdProps = {
   groupId: GroupId;
 };
 
-class UserComplexId extends ComplexIdValueObject<UserIdProps> {
-  public constructor(props: UserIdProps) {
+class UserComplexId extends ValueObject<UserIdProps> {
+  public constructor(props: ValueObjectProps<UserIdProps>) {
     super(props);
   }
 
   validate(props: ValueObjectProps<UserIdProps>): void {
     process.cwd();
   }
+}
+
+type IUserProps = {
+  previewMembers: PreviewMembers;
+};
+
+export class UserProps extends ValueObject<IUserProps> {
+  public constructor(props: ValueObjectProps<IUserProps>) {
+    super(props);
+  }
+
+  validate(props: ValueObjectProps<IUserProps>): void {}
 }
 
 class UserComplexIdEntity extends Entity<UserComplexId, UserProps> {
@@ -65,20 +74,125 @@ const pr = new PreviewMembers({
     (id) => new UserId(id),
   ),
 });
+const prop = new UserProps({
+  previewMembers: pr,
+});
+
 const user = new UserComplexIdEntity({
   id: new UserComplexId({
     userId: new UserId('d88b10ef-eee3-4770-b20b-9df62445cd3e'),
     groupId: new GroupId('1e557fe3-cacc-4915-8ce1-b50a2dcdcc44'),
   }),
-  props: {
-    previewMembers: pr,
-  },
+  props: prop,
   createdAt: CreatedAtValueObject.fromDateString('2022-10-06T08:54:55.584Z'),
   updatedAt: UpdatedAtValueObject.fromDateString('2022-10-06T08:54:55.584Z'),
   deletedAt: null,
 });
-console.log(pr.value);
-// console.log(JSON.stringify(user.toObject(), null, 4));
+
+export class UUID extends ValueObject<string> {
+  public constructor(properties: ValueObjectProperties<string>) {
+    super(properties);
+  }
+
+  validate(properties: ValueObjectProperties<string>) {}
+}
+
+export class PhoneNumber extends ValueObject<string[]> {
+  public constructor(properties: ValueObjectProperties<string[]>) {
+    super(properties);
+  }
+
+  public validate(properties: ValueObjectProperties<string[]>): void {}
+}
+
+export class Region extends ValueObject<string> {
+  public constructor(properties: ValueObjectProperties<string>) {
+    super(properties);
+  }
+
+  public validate(properties: ValueObjectProperties<string>): void {}
+}
+export type PhoneProperties = {
+  phoneNumber: PhoneNumber;
+  region: Region;
+  nested?: PhoneProperties;
+  vcl?: PhoneProperties[];
+};
+
+export class Phone extends ValueObject<PhoneProperties> {
+  public constructor(properties: ValueObjectProperties<PhoneProperties>) {
+    super(properties);
+  }
+
+  public validate(properties: ValueObjectProperties<PhoneProperties>) {}
+}
+
+const phone = new Phone({
+  phoneNumber: new PhoneNumber({
+    value: ['0869249714', '0869249714', '0869249714', '0869249714'],
+  }),
+  region: new Region({
+    value: 'VN',
+  }),
+  nested: {
+    phoneNumber: new PhoneNumber({
+      value: ['0869249714', '0869249714', '0869249714', '0869249714'],
+    }),
+    region: new Region({
+      value: 'VN',
+    }),
+    vcl: [
+      {
+        phoneNumber: new PhoneNumber({
+          value: ['0869249714', '0869249714', '0869249714', '0869249714'],
+        }),
+        region: new Region({
+          value: 'VN',
+        }),
+        nested: {
+          phoneNumber: new PhoneNumber({
+            value: ['0869249714', '0869249714', '0869249714', '0869249714'],
+          }),
+          region: new Region({
+            value: 'VN',
+          }),
+          vcl: [],
+        },
+      },
+    ],
+  },
+});
+
+export type UserEntityProps = {
+  phone: Phone;
+};
+export class UserEntity extends Entity<UUID, UserEntityProps> {
+  protected _id: UUID;
+
+  constructor(entityProps: EntityProps<UUID, UserEntityProps>) {
+    super(entityProps);
+    this._id = entityProps.id;
+  }
+
+  validate(): void {}
+}
+
+const user = new UserEntity({
+  id: new UUID({ value: 'vvvvvvvvvv' }),
+  props: {
+    phone,
+  },
+  createdAt: null,
+  updatedAt: null,
+});
+
+const userClone = user.clone();
+
+// (userClone._id as any) = 'xxxxxxxxxx';
+
+console.log(userClone);
+// console.log(toPlainObject(JSON.stringify(prop.value)));
+console.log(JSON.stringify(user.toObject(), null, 4));
 // const user1 = new UserStringIdEntity({
 //   id: UUIDValueObject.generate(),
 //   props: {

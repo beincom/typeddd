@@ -1,1 +1,1 @@
-// TODO: The feature to be developed in the future
+export * from './unit-of-work.interface';

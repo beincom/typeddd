@@ -1,20 +1,20 @@
-import { DateValueObject } from './date.value-object';
-import { ValueObjectProps } from '../value-objects';
-import { isNull, isUndefined } from '@beincom/common';
+import { isDate, isNull } from '@beincom/common';
+import { DateVO } from './date.value-object';
+import { ValueObjectProperties } from './value-object';
 
-export class DeletedAtValueObject extends DateValueObject {
-  public constructor(date = new Date()) {
+export class DeletedAt extends DateVO {
+  public constructor(date) {
     super(date);
   }
 
-  public validate(props: ValueObjectProps<Date>) {
-    if (isNull(props.value) || isUndefined(props.value)) {
+  public validate(properties: ValueObjectProperties<Date>) {
+    if (isNull(properties.value)) {
       return;
     }
-    super.validate(props);
+    return super.validate(properties);
   }
 
-  public static fromPrototype(dateValueObject: DateValueObject): DeletedAtValueObject {
-    return new DeletedAtValueObject(dateValueObject.value);
+  public static fromPrototype(dateValueObject: DateVO): DeletedAt {
+    return new DeletedAt(dateValueObject.value);
   }
 }

@@ -1,13 +1,13 @@
 import { Entity } from './entity';
 import { DomainEvents } from '../events';
-import { UUIDValueObject } from '../value-objects';
+import { UUID } from '../value-objects';
 import { IDomainEvent } from '../interfaces/domain';
 
 export abstract class AggregateRoot<
-  AggregateRootId extends UUIDValueObject = UUIDValueObject,
+  AggregateRootId extends UUID = UUID,
   AggregateRootProps = any,
 > extends Entity<AggregateRootId, AggregateRootProps> {
-  public _id: AggregateRootId;
+  public abstract _id: AggregateRootId;
 
   private _domainEvents: IDomainEvent<unknown>[] = [];
 
@@ -15,12 +15,12 @@ export abstract class AggregateRoot<
     return this._domainEvents;
   }
 
-  public addEvent(domainEvent: IDomainEvent<unknown>): void {
+  public raiseEvent(domainEvent: IDomainEvent<unknown>): void {
     DomainEvents.prepareForPublish(this);
     this._domainEvents.push(domainEvent);
   }
 
-  public clearEvents(): void {
+  public cleanEvents(): void {
     this._domainEvents = [];
   }
 }

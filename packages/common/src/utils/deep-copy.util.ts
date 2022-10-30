@@ -1,5 +1,9 @@
 import { isDate, isFunction, isNull, isObject } from './shared.utils';
 
+/**
+ * Deep copy object.
+ * @param target
+ */
 export const deepCopy = <T>(target: T): T => {
   if (isNull(target)) {
     return target;

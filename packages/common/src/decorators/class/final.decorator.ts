@@ -1,11 +1,11 @@
-import { RuntimeException } from '../../exceptions/runtime.exception';
+import { RuntimeException } from '../../exceptions';
 
 interface IFunction<T> extends Function {
   new (...args: any[]): T;
 }
 
 /**
- * The Final decorator
+ * The Final decorator. This decorator make class can't have subclass.
  */
 export function Final() {
   return function <T>(constructor: IFunction<T>): any {

@@ -1,14 +1,14 @@
 import { isURL, IllegalArgumentException } from '@beincom/common';
-import { ValueObject, ValueObjectProps } from './value-object';
+import { ValueObject, ValueObjectProperties } from './value-object';
 
-export class UrlValueObject extends ValueObject<string> {
+export class URL extends ValueObject<string> {
   public constructor(url: string) {
     super({
       value: url,
     });
   }
 
-  public validate(props: ValueObjectProps<string>): void {
+  public validate(props: ValueObjectProperties<string>): void {
     if (!isURL(props.value)) {
       throw new IllegalArgumentException('Invalid url value');
     }

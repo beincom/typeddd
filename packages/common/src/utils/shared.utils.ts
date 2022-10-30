@@ -1,5 +1,3 @@
-import { validate } from 'uuid';
-
 export const isUndefined = (input: any): input is undefined => typeof input === 'undefined';
 
 export const isNull = (input: any): input is null => input === null;
@@ -31,7 +29,7 @@ export const isString = (input: any): input is string => typeof input === 'strin
 
 export const isNumber = (input: any): input is number => typeof input === 'number';
 
-export const isEmptyArray = (input: any): boolean => !(input && input.length > 0);
+export const isEmptyArray = (input: any): boolean => !(Array.isArray(input) && input.length > 0);
 
 export const isEmptyObject = (input: any): boolean => {
   return JSON.stringify(input) === '{}';
