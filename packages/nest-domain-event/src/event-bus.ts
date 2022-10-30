@@ -3,7 +3,7 @@ import {
   DomainEvents,
   IDomainEventHandler,
   DomainEventCtor,
-} from '@typeddd/domain';
+} from '@beincom/domain';
 import { ModuleRef } from '@nestjs/core';
 import { Injectable, Type } from '@nestjs/common';
 

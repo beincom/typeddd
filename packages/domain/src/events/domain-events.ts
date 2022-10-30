@@ -1,8 +1,8 @@
-import { Final } from '@typeddd/common';
+import { Final } from '@beincom/common';
 import { AggregateRoot } from '../entities';
 import { DomainEvent } from './domain-event';
-import { LoggerPort } from '../interfaces/ports';
-import { UUIDValueObject } from '../value-objects';
+import { ILogger } from '../interfaces/ports';
+import { UUID } from '../value-objects';
 import { IDomainEvent } from '../interfaces/domain';
 import { DomainEventHandler } from './domain-event.handler';
 
@@ -33,15 +33,14 @@ export class DomainEvents {
   }
 
   public static async publishEvents(
-    id: UUIDValueObject,
-    logger: LoggerPort,
+    aggregateId: UUID,
+    logger: ILogger,
     requestId?: string,
   ): Promise<void> {
-    const aggregate = this.findAggregateByID(id);
-
+    const aggregate = this.findAggregateByID(aggregateId);
     if (aggregate) {
       logger.debug(
-        `[${aggregate.domainEvents.map((event) => event.eventName)}] published ${
+        `[${aggregate.domainEvents.map((event) => Reflect.getPrototypeOf(event))}] published ${
           aggregate.id.value
         }`,
       );
@@ -53,12 +52,12 @@ export class DomainEvents {
           return this.publish(event, logger);
         }),
       );
-      aggregate.clearEvents();
+      aggregate.cleanEvents();
       this.removeAggregateFromPublishList(aggregate);
     }
   }
 
-  private static findAggregateByID(id: UUIDValueObject): AggregateRoot<any, any> | undefined {
+  private static findAggregateByID(id: UUID): AggregateRoot<any, any> | undefined {
     for (const aggregate of this.aggregates) {
       if (aggregate.id.equals(id)) {
         return aggregate;
@@ -71,15 +70,16 @@ export class DomainEvents {
     this.aggregates.splice(index, 1);
   }
 
-  private static async publish(event: IDomainEvent<any>, logger: LoggerPort): Promise<void> {
+  private static async publish(event: IDomainEvent<any>, logger: ILogger): Promise<void> {
     const eventName: string = event.constructor.name;
 
     if (this.subscribers.has(eventName)) {
       const handlers: DomainEventHandler[] = this.subscribers.get(eventName) || [];
       await Promise.all(
         handlers.map((handler) => {
+          const prototype = Reflect.getPrototypeOf(event);
           logger.debug(
-            `[${handler.constructor.name}] handling ${event.eventName} ${event.aggregateId}`,
+            `[${handler.constructor.name}] handling ${prototype} ${event.eventId} ${event.aggregateId}`,
           );
           return handler.handle(event);
         }),

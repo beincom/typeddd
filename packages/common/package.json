@@ -1,5 +1,5 @@
 {
-  "name": "@typeddd/common",
+  "name": "@beincom/common",
   "version": "0.0.5",
   "description": "Domain Driven Design (@common package)",
   "keywords": [
@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "fast-equals": "^4.0.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@types/uuid": "^8.3.4"

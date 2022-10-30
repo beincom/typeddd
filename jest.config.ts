@@ -12,8 +12,8 @@ const config: Config.InitialOptions = {
   },
   collectCoverageFrom: ['<rootDir>/packages/*/src/**/*.ts'],
   moduleNameMapper: {
-    '@typeddd/(.*)/package.json': '<rootDir>/packages/$1/package.json',
-    '@typeddd/(.*)': '<rootDir>/packages/$1/src',
+    '@beincom/(.*)/package.json': '<rootDir>/packages/$1/package.json',
+    '@beincom/(.*)': '<rootDir>/packages/$1/src',
   },
   modulePathIgnorePatterns: ['dist/package.json', '<rootDir>/package.json'],
   setupFiles: ['<rootDir>/tests/setup.ts'],

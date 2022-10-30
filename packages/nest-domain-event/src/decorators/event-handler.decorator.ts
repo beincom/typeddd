@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { IDomainEvent } from '@typeddd/domain';
-import { generateUUID } from '@typeddd/common';
+import { IDomainEvent } from '@beincom/domain';
+import { generateUUID } from '@beincom/common';
 import { EVENTS_METADATA, EVENTS_HANDLER_METADATA } from '../constants';
 
 export const EventsHandler = (

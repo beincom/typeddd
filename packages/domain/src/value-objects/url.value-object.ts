@@ -1,14 +1,14 @@
-import { isURL, IllegalArgumentException } from '@typeddd/common';
-import { BaseValueObject, ValueObjectProps } from './base.value-object';
+import { isURL, IllegalArgumentException } from '@beincom/common';
+import { ValueObject, ValueObjectProperties } from './value-object';
 
-export class UrlValueObject extends BaseValueObject<string> {
+export class URL extends ValueObject<string> {
   public constructor(url: string) {
     super({
       value: url,
     });
   }
 
-  public validate(props: ValueObjectProps<string>): void {
+  public validate(props: ValueObjectProperties<string>): void {
     if (!isURL(props.value)) {
       throw new IllegalArgumentException('Invalid url value');
     }

@@ -1,11 +1,11 @@
-import { DateValueObject } from './date.value-object';
+import { DateVO } from './date.value-object';
 
-export class CreatedAtValueObject extends DateValueObject {
+export class CreatedAt extends DateVO {
   public constructor(date = new Date()) {
     super(date);
   }
 
-  public static fromPrototype(dateValueObject: DateValueObject): CreatedAtValueObject {
-    return new CreatedAtValueObject(dateValueObject.value);
+  public static fromPrototype(date: DateVO): CreatedAt {
+    return new CreatedAt(date.value);
   }
 }

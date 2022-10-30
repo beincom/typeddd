@@ -1,18 +1,44 @@
+import type { Response } from '../types';
 import { isObject, isString } from '../utils/shared.utils';
-import type { Cause, Response, ExceptionResponse } from '../types';
 
+/**
+ * This code base on Nestjs Http Exception.
+ * @see https://github.com/nestjs/nest/blob/master/packages/common/exceptions/http.exception.ts
+ */
 export abstract class BaseException extends Error {
-  abstract code: string;
+  public abstract code: string;
+  public cause: Error | undefined;
 
-  constructor(readonly response: Response, readonly cause?: Cause) {
+  protected constructor(private readonly response: Response, cause?: Error) {
     super();
-
     this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
-
+    this.initCause(cause);
     this.buildMessage();
+    this.captureStackTrace();
   }
 
+  /**
+   * Configures error chaining support
+   *
+   * See:
+   * - https://nodejs.org/en/blog/release/v16.9.0/#error-cause
+   * - https://github.com/microsoft/TypeScript/issues/45167
+   */
+  private initCause(cause?: Error) {
+    if (this.response instanceof Error && !cause) {
+      this.cause = this.response;
+    }
+    this.cause = cause;
+  }
+
+  private captureStackTrace() {
+    Error.captureStackTrace(this, this.constructor);
+  }
+
+  /**
+   * Build message exception.
+   * @private
+   */
   private buildMessage() {
     if (isString(this.response)) {
       this.message = this.response;
@@ -26,7 +52,7 @@ export abstract class BaseException extends Error {
     }
   }
 
-  public getResponse(): ExceptionResponse {
+  public getResponse() {
     return this.response;
   }
 }

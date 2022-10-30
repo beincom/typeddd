@@ -1,50 +1,53 @@
-import type { BaseEntity } from '../entities';
-import { BaseValueObject } from '../value-objects';
-import { deepCopy, isObject, isOwnerProperties } from '@typeddd/common';
+import { DeepPartial, isNull, isUndefined } from '@beincom/common';
+import { DomainPrimitive, DomainPrimitiveProperties, ValueObject } from '../value-objects';
 
-export const isEntity = (obj: any): obj is BaseEntity<any, any> => {
-  return (
-    obj &&
-    isOwnerProperties(obj, ['toObject', 'id']) &&
-    BaseValueObject.isValueObject((obj as BaseEntity<any, any>).id)
-  );
+export const isDomainPrimitiveProperties = <T = DomainPrimitive>(
+  target: unknown,
+): target is DomainPrimitiveProperties<T> => {
+  return target && !!(target as DomainPrimitiveProperties<T>).value;
 };
 
-export const toPlainObject = (item: any) => {
-  if (BaseValueObject.isValueObject(item)) {
-    return item.value;
+export const valueObjectToPlain = <T>(target: any): DeepPartial<T> => {
+  if (isUndefined(target)) {
+    return null;
   }
-  if (isEntity(item)) {
-    return item.toObject();
+
+  if (
+    isNull(target) ||
+    typeof target === 'number' ||
+    typeof target === 'string' ||
+    typeof target === 'symbol'
+  ) {
+    return target;
   }
-  return item;
-};
 
-const forkAssign = (source: any, readOnlyProperty: any, value: any): any => {
-  Object.defineProperties(source, {
-    [readOnlyProperty]: {
-      value,
-      writable: true,
-    },
-  });
-};
+  if (isDomainPrimitiveProperties(target)) {
+    return target.value;
+  }
 
-export const domainObjectToPlainObject = (props: any) => {
-  const propsCopy = {};
-
-  for (const prop in props) {
-    if (Array.isArray(props[prop])) {
-      propsCopy[prop] = props[prop].map((item) => {
-        return toPlainObject(item);
-      });
+  if (Array.isArray(target)) {
+    const cp = [];
+    for (const item of target) {
+      cp.push(valueObjectToPlain(item));
     }
-    if (isObject(props[prop])) {
-      for (const entityProp in props[prop]) {
-        propsCopy[prop] = { [entityProp]: {} };
-        propsCopy[prop][entityProp] = toPlainObject(props[prop][entityProp]);
-      }
-    }
-    propsCopy[prop] = toPlainObject(props[prop]);
+    return cp;
   }
-  return deepCopy(propsCopy);
+
+  const cpo = {};
+
+  const keys = Object.keys(target);
+  if (keys.length > 0) {
+    for (const key of keys) {
+      cpo[key] = valueObjectToPlain(target[key]);
+    }
+  }
+
+  return cpo as unknown as T;
+};
+
+export const getInvalidValueMessage = (vo: ValueObject<unknown>, msg?: string) => {
+  if (msg) {
+    return msg;
+  }
+  return `${vo.constructor.name} value invalid`;
 };

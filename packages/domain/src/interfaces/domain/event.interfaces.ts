@@ -1,17 +1,15 @@
 export interface IDomainEvent<T> {
-  payload: T;
-
   eventId: string;
 
-  eventName: string;
+  aggregateId: unknown;
 
-  aggregateId: string;
+  payload: T;
 
   occurredAt: number;
 
-  version: number;
+  version?: number;
 
-  order: number;
+  order?: number;
 
-  requestId: string;
+  requestId?: any;
 }

@@ -1,3 +1,5 @@
-import { BaseException } from '@typeddd/common';
+import { BaseException } from '@beincom/common';
 
-export class DomainException extends BaseException {}
+export class DomainException extends BaseException {
+  public code: string;
+}

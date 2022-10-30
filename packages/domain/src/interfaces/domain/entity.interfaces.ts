@@ -1,20 +1,16 @@
-import type {
-  CreatedAtValueObject,
-  UpdatedAtValueObject,
-  DeletedAtValueObject,
-} from '../../value-objects';
+import type { CreatedAt, UpdatedAt, DeletedAt } from '../../value-objects';
 
 export interface BaseEntityProps<T> {
   id: T;
-  createdAt: CreatedAtValueObject;
-  updatedAt: UpdatedAtValueObject;
-  deletedAt: DeletedAtValueObject;
+  createdAt: CreatedAt;
+  updatedAt: UpdatedAt;
+  deletedAt: DeletedAt;
 }
 
 export interface EntityProps<T, V> {
   id: T;
   props: V;
-  createdAt: CreatedAtValueObject;
-  updatedAt: UpdatedAtValueObject;
-  deletedAt?: DeletedAtValueObject;
+  createdAt: CreatedAt;
+  updatedAt: UpdatedAt;
+  deletedAt?: DeletedAt;
 }
