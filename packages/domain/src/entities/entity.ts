@@ -21,13 +21,13 @@ export abstract class Entity<
 > {
   protected abstract _id: Identity;
 
-  private readonly _props: Props;
+  private _props: Props;
 
-  private readonly _createdAt: CreatedAt;
+  private _createdAt: CreatedAt;
 
-  private readonly _updatedAt: UpdatedAt;
+  private _updatedAt: UpdatedAt;
 
-  private readonly _deletedAt?: DeletedAt;
+  private _deletedAt?: DeletedAt;
 
   protected constructor(entityProps: EntityProps<Identity, Props>) {
     const { id, props, createdAt, updatedAt, deletedAt } = entityProps;
@@ -119,5 +119,21 @@ export abstract class Entity<
 
   public get deletedAt(): DeletedAt {
     return this._deletedAt;
+  }
+
+  public set createdAt(date: CreatedAt) {
+    this._createdAt = date;
+  }
+
+  public set updatedAt(date: UpdatedAt) {
+    this._updatedAt = date;
+  }
+
+  public set deletedAt(date: DeletedAt) {
+    this._deletedAt = date;
+  }
+
+  public set props(props: Props) {
+    this._props = props;
   }
 }
