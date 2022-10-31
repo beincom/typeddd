@@ -32,7 +32,7 @@ export abstract class AggregateRoot<
     this._domainEvents = [];
   }
 
-  public clone() {
+  public clone<T extends Entity<AggregateRootId, AggregateRootProps> = this>(): T {
     const entityProps: EntityProps<AggregateRootId, AggregateRootProps> = {
       id: this._id,
       props: this._props,
@@ -43,6 +43,6 @@ export abstract class AggregateRoot<
 
     const domainEvents: IDomainEvent<unknown>[] = this._domainEvents;
 
-    return clone<this>(this, [entityProps, domainEvents]);
+    return clone<T>(this, [entityProps, domainEvents]);
   }
 }

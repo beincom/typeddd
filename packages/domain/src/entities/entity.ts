@@ -97,7 +97,7 @@ export abstract class Entity<
     return Object.freeze(copyProps);
   }
 
-  public clone() {
+  public clone<T extends Entity<Identity, Props> = this>(): T {
     const argsCtor: EntityProps<Identity, Props> = {
       id: this._id,
       props: this._props,
@@ -106,7 +106,7 @@ export abstract class Entity<
       deletedAt: this._deletedAt,
     };
 
-    return clone<this>(this, [argsCtor]);
+    return clone<T>(this, [argsCtor]);
   }
 
   public get createdAt(): CreatedAt {
