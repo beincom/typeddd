@@ -9,7 +9,7 @@ export abstract class AggregateRoot<
   AggregateRootProps = any,
 > extends Entity<AggregateRootId, AggregateRootProps> {
   public abstract _id: AggregateRootId;
-  private _domainEvents: IDomainEvent<unknown>[];
+  protected _domainEvents: IDomainEvent<unknown>[];
 
   protected constructor(
     entityProps: EntityProps<AggregateRootId, AggregateRootProps>,
