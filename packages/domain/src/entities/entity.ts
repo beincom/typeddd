@@ -21,13 +21,13 @@ export abstract class Entity<
 > {
   protected abstract _id: Identity;
 
-  private _props: Props;
+  protected _props: Props;
 
-  private _createdAt: CreatedAt;
+  protected _createdAt: CreatedAt;
 
-  private _updatedAt: UpdatedAt;
+  protected _updatedAt: UpdatedAt;
 
-  private _deletedAt?: DeletedAt;
+  protected _deletedAt?: DeletedAt;
 
   protected constructor(entityProps: EntityProps<Identity, Props>) {
     const { id, props, createdAt, updatedAt, deletedAt } = entityProps;
@@ -97,7 +97,7 @@ export abstract class Entity<
     return Object.freeze(copyProps);
   }
 
-  public clone(): this {
+  public clone() {
     const argsCtor: EntityProps<Identity, Props> = {
       id: this._id,
       props: this._props,
@@ -106,7 +106,7 @@ export abstract class Entity<
       deletedAt: this._deletedAt,
     };
 
-    return clone(this, argsCtor);
+    return clone<this>(this, argsCtor);
   }
 
   public get createdAt(): CreatedAt {
