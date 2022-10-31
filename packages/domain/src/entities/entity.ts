@@ -106,7 +106,7 @@ export abstract class Entity<
       deletedAt: this._deletedAt,
     };
 
-    return clone<this>(this, argsCtor);
+    return clone<this>(this, [argsCtor]);
   }
 
   public get createdAt(): CreatedAt {
