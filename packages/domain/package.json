@@ -29,10 +29,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@beincom/common": "~0.0.7"
+    "@beincom/common": "~0.0.8"
   },
   "peerDependencies": {
-    "@beincom/common": "~0.0.7"
+    "@beincom/common": "~0.0.8"
   },
   "peerDependenciesMeta": {
     "@beincom/common": {
