@@ -17,7 +17,10 @@ yarn add @beincom/common @beincom/domain  @beincom/infrastructure reflect-metada
 ```
 ## Getting started
 - To check out the [guide](README.MD)
-- Tài liệu [tiếng việt](VN.README.MD)
+- Tài liệu tiếng việt:
+    - [@common](https://github.com/Beincomm/typeddd/blob/master/packages/common/README.md)
+    - [@domain](https://github.com/Beincomm/typeddd/blob/master/packages/domain/README.md)
+    - [@infrastructure](https://github.com/Beincomm/typeddd/blob/master/packages/infrastructure/README.md)
 ## 🤔 What is Domain-Driven Design?
 
 > Domain-Driven Design (DDD) is a method for developing a team's understanding of a problem space. It emphasises placing the primary focus of a project on the core area of the business (the core domain). This often takes the form of facilitated workshops with domain experts and the development of a shared set of conceptual models. DDD has the additional benefit of creating a shared understanding (ubiquitous language) between teams when designing technical solutions.

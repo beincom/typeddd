@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 export const isUndefined = (input: any): input is undefined => typeof input === 'undefined';
 
 export const isNull = (input: any): input is null => input === null;
@@ -21,7 +23,7 @@ export const isPlainObject = (input: any): input is object => {
   );
 };
 
-export const isDate = (input: any): input is Date => input instanceof Date;
+export const isDate = (input: any): input is Date => validator.isDate(input);
 
 export const isFunction = (input: any): boolean => typeof input === 'function';
 

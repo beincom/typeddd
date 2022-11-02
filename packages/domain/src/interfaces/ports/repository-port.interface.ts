@@ -40,7 +40,3 @@ export interface Query<Entity, EntityProps> {
   findById(id: any): Promise<Entity> | never;
   findOne(params: QueryParams<EntityProps>): Promise<Entity> | never;
 }
-
-export interface RepositoryPort<E extends Entity<any, EntityProps>, EntityProps>
-  extends Command<E, EntityProps>,
-    Query<E, EntityProps> {}

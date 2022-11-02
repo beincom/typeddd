@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { ValueObject } from '../value-objects';
-import { VALUE_OBJECT_PROPERTY_METADATA } from '../constants';
+import { VALUE_OBJECT_PROPERTIES_METADATA } from '../constants';
 
 export type ValuePropertyOptions = {
   allowNull: boolean;
@@ -11,7 +11,7 @@ export const ValueProperty = <T extends ValueObject<unknown>>(
 ): PropertyDecorator => {
   return function (target: T, propertyKey) {
     Reflect.defineMetadata(
-      VALUE_OBJECT_PROPERTY_METADATA,
+      VALUE_OBJECT_PROPERTIES_METADATA,
       {
         [propertyKey]: options,
       },
