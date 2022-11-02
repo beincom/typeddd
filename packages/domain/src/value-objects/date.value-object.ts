@@ -3,12 +3,12 @@ import { IllegalArgumentException, isDate } from '@beincom/common';
 import { ValueObject, ValueObjectProperties } from './value-object';
 
 export class DateVO extends ValueObject<Date> {
-  public constructor(date: Date) {
-    super({ value: date });
+  public constructor(properties: ValueObjectProperties<Date>) {
+    super(properties);
   }
 
   public static fromDateString(dateStr: string) {
-    return new DateVO(new Date(dateStr));
+    return new DateVO({ value: new Date(dateStr) });
   }
 
   public validate(properties: ValueObjectProperties<Date>) {

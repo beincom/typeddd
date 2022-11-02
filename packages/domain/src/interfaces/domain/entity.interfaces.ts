@@ -14,3 +14,29 @@ export interface EntityProps<T, V> {
   updatedAt: UpdatedAt;
   deletedAt?: DeletedAt;
 }
+
+export type GetterCustomEntityProps<V> = {
+  [K in keyof V]: V[K];
+};
+
+export type GetterNativeEntityProps<T> = {
+  id: T;
+  createdAt: CreatedAt;
+  updatedAt: UpdatedAt;
+  deletedAt?: DeletedAt;
+};
+
+export type GetterEntityProps<T, V> = GetterNativeEntityProps<T> & GetterCustomEntityProps<V>;
+
+export type SetterCustomEntityProps<V> = {
+  [K in keyof V]: V[K];
+};
+
+export type SetterNativeEntityProps<T> = {
+  id: T;
+  createdAt: CreatedAt;
+  updatedAt: UpdatedAt;
+  deletedAt?: DeletedAt;
+};
+
+export type SetterEntityProps<T, V> = SetterNativeEntityProps<T> & SetterCustomEntityProps<V>;

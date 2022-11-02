@@ -1,22 +1,24 @@
-import { Entity } from './entity';
 import { UUID } from '../value-objects';
-import { clone } from '@beincom/common';
 import { DomainEvents } from '../events';
+import { cloneEntityProps } from '../utils';
+import { Entity, EntityProperties, EntitySetting } from './entity';
+import { clone, deepCopy } from '@beincom/common';
 import { EntityProps, IDomainEvent } from '../interfaces/domain';
 
 export abstract class AggregateRoot<
   AggregateRootId extends UUID = UUID,
-  AggregateRootProps = any,
+  AggregateRootProps extends EntityProperties<any> = any,
 > extends Entity<AggregateRootId, AggregateRootProps> {
-  public abstract _id: AggregateRootId;
+  protected abstract _id: AggregateRootId;
   protected _domainEvents: IDomainEvent<unknown>[];
 
   protected constructor(
     entityProps: EntityProps<AggregateRootId, AggregateRootProps>,
-    domainEvent: IDomainEvent<unknown>[],
+    domainEvents: IDomainEvent<unknown>[],
+    setting: EntitySetting,
   ) {
-    super(entityProps);
-    this._domainEvents = domainEvent;
+    super(entityProps, setting);
+    this._domainEvents = domainEvents;
   }
 
   public get domainEvents(): IDomainEvent<unknown>[] {
@@ -40,9 +42,11 @@ export abstract class AggregateRoot<
       updatedAt: this._updatedAt,
       deletedAt: this._deletedAt,
     };
-
-    const domainEvents: IDomainEvent<unknown>[] = this._domainEvents;
-
-    return clone<T>(this, [entityProps, domainEvents]);
+    const entityPropsClone = cloneEntityProps(this, entityProps);
+    const domainEventsClone: IDomainEvent<unknown>[] = this._domainEvents.map((event) =>
+      deepCopy(event),
+    );
+    const settingClone = { ...this._setting };
+    return clone<T>(this, [entityPropsClone, domainEventsClone, settingClone]);
   }
 }
