@@ -40,7 +40,15 @@ const nicknameClone = ninckname.clone();
 
 nicknameClone.equal(ninckname);
 ```
-
+#### Một số value object có sẵn.
+- ID.
+- UUID.
+- Email.
+- URL.
+- DateVO.
+- CreatedAt.
+- UpdatedAt.
+- DeletedAt.
 
 ### Entity
 
