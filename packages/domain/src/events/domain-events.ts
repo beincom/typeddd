@@ -59,7 +59,7 @@ export class DomainEvents {
 
   private static findAggregateByID(id: UUID): AggregateRoot<any, any> | undefined {
     for (const aggregate of this.aggregates) {
-      if (aggregate.id.equals(id)) {
+      if (aggregate.id.equal(id)) {
         return aggregate;
       }
     }
