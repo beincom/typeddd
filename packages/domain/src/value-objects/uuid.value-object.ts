@@ -3,7 +3,7 @@ import { ValueObjectProperties } from './value-object';
 import { getInvalidValueMessage } from '../utils/domain.utils';
 import { isUUID, IllegalArgumentException, generateUUID } from '@beincom/common';
 
-export class UUID extends ID {
+export class UUID extends ID<string> {
   public constructor(properties: ValueObjectProperties<string>) {
     super(properties);
   }

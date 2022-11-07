@@ -8,6 +8,7 @@ import {
   DateVO,
   CreatedAt,
   UpdatedAt,
+  ID,
 } from '../../../packages/domain/src';
 
 export type FullnameProps = {
@@ -52,10 +53,23 @@ export type UserProps = {
   fullname: Fullname;
 };
 
-export class User extends Entity<UUID, UserProps> {
-  protected _id: UUID;
+export type XProps = {
+  username: Username;
+  fullname: Fullname;
+};
 
-  constructor(entityProps: EntityProps<UUID, UserProps>, setting?: EntitySetting) {
+export class X extends ID<XProps> {
+  public constructor(properties: ValueObjectProperties<XProps>) {
+    super(properties);
+  }
+
+  public validate(properties: ValueObjectProperties<XProps>): void {}
+}
+
+export class User extends Entity<X, UserProps> {
+  protected _id: X;
+
+  constructor(entityProps: EntityProps<X, UserProps>, setting?: EntitySetting) {
     super(entityProps, setting);
     this._id = entityProps.id;
   }
@@ -73,21 +87,17 @@ export function initUser() {
   const nickname = ['chibi', 'yato'].map((nick) => new Nickname({ value: nick }));
   const username = new Username({ value: 'nattogo' });
   const date = new DateVO({ value: new Date() });
+  const fullname = new Fullname({ firstname: 'the', lastname: 'van' });
 
   const user = new User({
-    id,
+    id: new X({ username, fullname }),
     props: {
       nickname,
       username,
-      fullname: new Fullname({ firstname: 'the', lastname: 'van' }),
+      fullname,
     },
     createdAt: CreatedAt.fromPrototype(date),
     updatedAt: UpdatedAt.fromPrototype(date),
-  });
-
-  user.set('id', UUID.generate());
-  user.set({
-    nickname: [],
   });
 
   return user;

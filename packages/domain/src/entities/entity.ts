@@ -1,8 +1,8 @@
-import { EntityProps, GetterEntityProps, SetterEntityProps } from '../interfaces/domain';
 import { EntityProperty } from '../decorators';
 import { cloneEntityProps, valueObjectToPlain } from '../utils/domain.utils';
 import { isNull, isUndefined, deepEqual, DeepPartial, clone } from '@beincom/common';
-import { ID, DateVO, CreatedAt, UpdatedAt, DeletedAt, ValueObject } from '../value-objects';
+import { EntityProps, GetterEntityProps, SetterEntityProps } from '../interfaces/domain';
+import { ID, DateVO, CreatedAt, UpdatedAt, DeletedAt, ValueObject, UUID } from '../value-objects';
 import { SetterNotAllowDomainException } from '../exceptions/setter-not-allow.domain.exception';
 
 export type EntitySetting = {
@@ -22,7 +22,7 @@ export type EntityProperties<T> = {
 };
 
 export abstract class Entity<
-  Identity extends ID = ID,
+  Identity extends ID<any> = UUID,
   Props extends EntityProperties<any> = EntityProperties<any>,
 > {
   /**
@@ -284,7 +284,7 @@ export abstract class Entity<
    * @param target  Entity
    * @protected
    */
-  protected createSnapShot(target: Entity) {
+  protected createSnapShot(target: Entity<Identity, Props>) {
     if (!this._snapshot) {
       this._snapshot = target.toObject();
     }
