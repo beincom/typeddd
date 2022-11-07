@@ -1,6 +1,6 @@
 {
   "name": "@beincom/infrastructure",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Domain Driven Design (@infrastructure package)",
   "keywords": [
     "typescript",
@@ -29,12 +29,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@beincom/common": "~0.1.0",
-    "@beincom/domain": "~0.1.0"
+    "@beincom/common": "~0.1.1",
+    "@beincom/domain": "~0.1.1"
   },
   "peerDependencies": {
-    "@beincom/common": "~0.1.0",
-    "@beincom/domain": "~0.1.0"
+    "@beincom/common": "~0.1.1",
+    "@beincom/domain": "~0.1.1"
   },
   "peerDependenciesMeta": {
     "@beincom/common": {
