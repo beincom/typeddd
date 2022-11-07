@@ -1,11 +1,5 @@
+import { EntityProps, GetterEntityProps, SetterEntityProps } from '../interfaces/domain';
 import { EntityProperty } from '../decorators';
-import {
-  EntityProps,
-  GetterCustomEntityProps,
-  GetterEntityProps,
-  GetterNativeEntityProps,
-  SetterEntityProps,
-} from '../interfaces/domain';
 import { cloneEntityProps, valueObjectToPlain } from '../utils/domain.utils';
 import { isNull, isUndefined, deepEqual, DeepPartial, clone } from '@beincom/common';
 import { ID, DateVO, CreatedAt, UpdatedAt, DeletedAt, ValueObject } from '../value-objects';
@@ -233,9 +227,11 @@ export abstract class Entity<
    * @param key T extends keyof Props
    * @return  Props[T]
    */
-  public get<K extends keyof GetterEntityProps<Identity, Props>>(key: K) {
+  public get<K extends keyof GetterEntityProps<Identity, Props>>(
+    key: K,
+  ): GetterEntityProps<Identity, Props>[K] {
     if (Object.keys(this._props).includes(key as string)) {
-      return this._props[key];
+      return this._props[key] as unknown as GetterEntityProps<Identity, Props>[K];
     }
     return this[`_${key as string}`];
   }
