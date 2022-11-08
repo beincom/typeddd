@@ -15,6 +15,8 @@ export type ValueObjects<T> = {
 
 export type EntityProperties<T> = {
   [K in keyof T]:
+    | Entity
+    | Entity[]
     | ValueObject<T>
     | ValueObject<T>[]
     | ValueObjects<T>
