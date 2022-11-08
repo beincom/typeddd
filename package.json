@@ -1,6 +1,6 @@
 {
   "name": "@beincom/domain",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Domain Driven Design (@domain package)",
   "keywords": [
     "typescript",
