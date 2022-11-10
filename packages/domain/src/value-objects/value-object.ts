@@ -1,10 +1,10 @@
-import { ValueObjectProperty } from '../decorators';
-import { clone, deepEqual, DeepPartial, isDate } from '@beincom/common';
 import {
   cloneValueObjectProps,
   isDomainPrimitiveProperties,
   valueObjectToPlain,
 } from '../utils/domain.utils';
+import { ValueObjectProperty } from '../decorators';
+import { clone, deepEqual, isDate } from '@beincom/common';
 
 export type Primitive = string | number | boolean;
 
@@ -15,7 +15,15 @@ export type DomainPrimitiveProperties<T> = {
 };
 
 export type DomainProperties<T> = {
-  [K in keyof T]: T | DeepPartial<T[K]> | DeepPartial<T[K]>[];
+  [K in keyof T]: T[K];
+};
+
+export type RawProperties<T> = {
+  [K in keyof T]: T[K] extends ValueObject
+    ? T[K]['properties'] extends DomainPrimitive
+      ? T[K]['properties']['value']
+      : RawProperties<T[K]['properties']>
+    : DomainPrimitiveProperties<T[K]>['value'];
 };
 
 export type ValueObjectProperties<T> = T extends DomainPrimitive
@@ -24,11 +32,15 @@ export type ValueObjectProperties<T> = T extends DomainPrimitive
 
 export abstract class ValueObject<T = any> {
   @ValueObjectProperty()
-  protected readonly properties: ValueObjectProperties<T>;
+  protected readonly _properties: ValueObjectProperties<T>;
 
   protected constructor(properties: ValueObjectProperties<T>) {
     this.validate(properties);
-    this.properties = properties;
+    this._properties = properties;
+  }
+
+  public get properties(): ValueObjectProperties<T> {
+    return this._properties;
   }
 
   /**
@@ -54,14 +66,13 @@ export abstract class ValueObject<T = any> {
    * If the value object property's type is Primitive return that value.
    * If the value object property's type is object return plaint object.
    * This value has been frozen.
-   * @return T
    */
-  public get value() {
+  public get value(): RawProperties<T> {
     if (isDomainPrimitiveProperties(this.properties)) {
       return this.properties.value;
     }
-    const values = valueObjectToPlain<T>(this.properties);
-    return Object.freeze(values as unknown as T);
+    const values = valueObjectToPlain(this.properties);
+    return Object.freeze(values as unknown as RawProperties<T>);
   }
 
   /**

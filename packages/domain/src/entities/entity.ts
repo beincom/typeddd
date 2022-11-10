@@ -1,30 +1,20 @@
 import { EntityProperty } from '../decorators';
+import { isNull, isUndefined, deepEqual, clone } from '@beincom/common';
 import { cloneEntityProps, valueObjectToPlain } from '../utils/domain.utils';
-import { isNull, isUndefined, deepEqual, DeepPartial, clone } from '@beincom/common';
+import { ID, DateVO, CreatedAt, UpdatedAt, DeletedAt, UUID } from '../value-objects';
 import { EntityProps, GetterEntityProps, SetterEntityProps } from '../interfaces/domain';
-import { ID, DateVO, CreatedAt, UpdatedAt, DeletedAt, ValueObject, UUID } from '../value-objects';
 import { SetterNotAllowDomainException } from '../exceptions/setter-not-allow.domain.exception';
 
 export type EntitySetting = {
   disablePropSetter?: boolean;
 };
 
-export type ValueObjects<T> = {
-  [index: string]: ValueObject<T> | ValueObject<T>[];
-};
-
 export type EntityProperties<T> = {
-  [K in keyof T]:
-    | Entity
-    | Entity[]
-    | ValueObject<T>
-    | ValueObject<T>[]
-    | ValueObjects<T>
-    | DeepPartial<EntityProperties<T>>;
+  [K in keyof T]: T[K];
 };
 
 export abstract class Entity<
-  Identity extends ID<any> = UUID,
+  Identity extends ID<unknown> = UUID,
   Props extends EntityProperties<any> = EntityProperties<any>,
 > {
   /**
