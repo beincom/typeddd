@@ -1,6 +1,6 @@
 {
   "name": "@beincom/common",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Domain Driven Design (@common package)",
   "keywords": [
     "typescript",
