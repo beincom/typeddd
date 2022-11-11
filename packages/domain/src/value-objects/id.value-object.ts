@@ -1,15 +1,9 @@
-import { getInvalidValueMessage } from '../utils/domain.utils';
 import { ValueObject, ValueObjectProperties } from './value-object';
-import { IllegalArgumentException, isNull, isUndefined } from '@beincom/common';
 
-export class ID extends ValueObject<string> {
-  protected constructor(properties: ValueObjectProperties<string>) {
+export abstract class ID<T> extends ValueObject<T> {
+  protected constructor(properties: ValueObjectProperties<T>) {
     super(properties);
   }
 
-  public validate(properties: ValueObjectProperties<string>) {
-    if (isNull(properties.value) || isUndefined(properties.value) || properties.value === '') {
-      throw new IllegalArgumentException(getInvalidValueMessage(this));
-    }
-  }
+  public abstract validate(properties: ValueObjectProperties<T>): void;
 }

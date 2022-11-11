@@ -1,5 +1,5 @@
 import { Entity } from '../entities/entity';
-import { clone, DeepPartial, isNull, isUndefined } from '@beincom/common';
+import { clone, isNull, isUndefined } from '@beincom/common';
 import { DomainPrimitive, DomainPrimitiveProperties, ValueObject } from '../value-objects';
 
 export const isDomainPrimitiveProperties = <T = DomainPrimitive>(
@@ -85,7 +85,7 @@ export const cloneValueObjectProps = <VO>(target, voProps: any): VO | any => {
 
   return voPropsClone as unknown as VO;
 };
-export const valueObjectToPlain = <T>(target: any): DeepPartial<T> => {
+export const valueObjectToPlain = <T>(target: any): T | any => {
   if (isUndefined(target)) {
     return null;
   }

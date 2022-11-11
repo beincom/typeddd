@@ -13,7 +13,9 @@ describe('Entity', () => {
 
     expect(userClone).toEqual(user);
 
-    userClone.get('nickname');
+    userClone.set('nickname', []);
+
+    user.toObject();
 
     expect(userClone.get('nickname')).not.toEqual(user.get('nickname'));
   });

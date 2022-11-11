@@ -5,7 +5,7 @@ import { ValueObjectProperties } from './value-object';
 export class DeletedAt extends DateVO {
   public validate(properties: ValueObjectProperties<Date>) {
     if (isNull(properties?.value)) {
-      return { value: null };
+      return;
     }
     return super.validate(properties);
   }
