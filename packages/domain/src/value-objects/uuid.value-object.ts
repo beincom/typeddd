@@ -1,8 +1,10 @@
 import { ID } from './id.value-object';
+import { NullAbleValue } from '../decorators';
 import { ValueObjectProperties } from './value-object';
 import { getInvalidValueMessage } from '../utils/domain.utils';
 import { isUUID, IllegalArgumentException, generateUUID } from '@beincom/common';
 
+@NullAbleValue()
 export class UUID extends ID<string> {
   public constructor(properties: ValueObjectProperties<string>) {
     super(properties);

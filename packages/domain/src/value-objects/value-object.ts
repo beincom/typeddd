@@ -1,10 +1,11 @@
 import {
   cloneValueObjectProps,
+  getNullableConfig,
   isDomainPrimitiveProperties,
   valueObjectToPlain,
 } from '../utils/domain.utils';
 import { ValueObjectProperty } from '../decorators';
-import { clone, deepEqual, isDate } from '@beincom/common';
+import { clone, deepEqual, isDate, isEmptyObject, isUndefined, isNull } from '@beincom/common';
 
 export type Primitive = string | number | boolean;
 
@@ -34,9 +35,24 @@ export abstract class ValueObject<T = any> {
   @ValueObjectProperty()
   protected readonly _properties: ValueObjectProperties<T>;
 
+  private propNullable = getNullableConfig(this?.constructor?.name);
+
+  private isEmptyProperties(properties: ValueObjectProperties<T>) {
+    const propValues = isDomainPrimitiveProperties(properties) ? properties.value : properties;
+
+    return isEmptyObject(propValues) || isUndefined(propValues) || isNull(propValues);
+  }
+
   protected constructor(properties: ValueObjectProperties<T>) {
-    this.validate(properties);
-    this._properties = properties;
+    if (this.isEmptyProperties(properties)) {
+      if (!this.propNullable) {
+        this.validate(properties);
+      }
+      this._properties = properties;
+    } else {
+      this.validate(properties);
+      this._properties = properties;
+    }
   }
 
   public get properties(): ValueObjectProperties<T> {
