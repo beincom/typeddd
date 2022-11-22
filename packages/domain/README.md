@@ -2,6 +2,17 @@
 > package này giúp xây dựng domain entity, value object , aggregate, domain event.
 ### Value Object
 
+#### Set null value.
+Để set null value cho ValueObject đánh dấu VO bằng @NullAbleValue decorator.
+
+```ts
+@NullAbleValue()
+export class Nickname extends ValueObject<string> {
+// ....
+}
+
+const nickname = new Nickname({ value: null});
+```
 #### Init.
 
 ```ts
