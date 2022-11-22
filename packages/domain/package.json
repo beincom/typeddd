@@ -1,6 +1,6 @@
 {
   "name": "@beincom/domain",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Domain Driven Design (@domain package)",
   "keywords": [
     "typescript",
@@ -29,10 +29,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@beincom/common": "~0.1.5"
+    "@beincom/common": "~0.1.6"
   },
   "peerDependencies": {
-    "@beincom/common": "~0.1.5"
+    "@beincom/common": "~0.1.6"
   },
   "peerDependenciesMeta": {
     "@beincom/common": {
