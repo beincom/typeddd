@@ -1,6 +1,8 @@
 import { isURL, IllegalArgumentException } from '@beincom/common';
 import { ValueObject, ValueObjectProperties } from './value-object';
+import { NullAbleValue } from '../decorators';
 
+@NullAbleValue()
 export class URL extends ValueObject<string> {
   public constructor(url: string) {
     super({

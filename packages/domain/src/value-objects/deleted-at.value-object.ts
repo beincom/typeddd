@@ -1,13 +1,11 @@
-import { isNull } from '@beincom/common';
 import { DateVO } from './date.value-object';
 import { ValueObjectProperties } from './value-object';
+import { NullAbleValue } from '../decorators';
 
+@NullAbleValue()
 export class DeletedAt extends DateVO {
-  public validate(properties: ValueObjectProperties<Date>) {
-    if (isNull(properties?.value)) {
-      return;
-    }
-    return super.validate(properties);
+  public constructor(properties: ValueObjectProperties<Date>) {
+    super(properties);
   }
 
   public static fromPrototype(date: DateVO): DeletedAt {

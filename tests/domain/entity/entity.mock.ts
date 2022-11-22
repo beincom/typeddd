@@ -9,12 +9,15 @@ import {
   CreatedAt,
   UpdatedAt,
   ID,
+  NullAbleValue,
 } from '../../../packages/domain/src';
 
 export type FullnameProps = {
   firstname: string;
   lastname: string;
 };
+
+@NullAbleValue()
 export class Fullname extends ValueObject<FullnameProps> {
   public constructor(properties: ValueObjectProperties<FullnameProps>) {
     super(properties);
@@ -22,7 +25,7 @@ export class Fullname extends ValueObject<FullnameProps> {
 
   public validate(properties: ValueObjectProperties<FullnameProps>): void {}
 }
-
+@NullAbleValue()
 export class Nickname extends ValueObject<string> {
   public constructor(properties: ValueObjectProperties<string>) {
     super(properties);
@@ -34,7 +37,7 @@ export class Nickname extends ValueObject<string> {
     }
   }
 }
-
+@NullAbleValue()
 export class Username extends ValueObject<string> {
   public constructor(properties: ValueObjectProperties<string>) {
     super(properties);
@@ -58,6 +61,7 @@ export type XProps = {
   fullname: Fullname;
 };
 
+@NullAbleValue()
 export class X extends ID<XProps> {
   public constructor(properties: ValueObjectProperties<XProps>) {
     super(properties);

@@ -59,7 +59,7 @@ export abstract class Entity<
     this.id = id;
     const nowValue = new DateVO({ value: new Date() });
     this._createdAt = createdAt || CreatedAt.fromPrototype(nowValue);
-    this._updatedAt = updatedAt || UpdatedAt.fromPrototype(nowValue);
+    this._updatedAt = updatedAt || new UpdatedAt({ value: null });
     this._deletedAt = deletedAt || new DeletedAt({ value: null });
     this._props = props;
     this._setting = setting

@@ -1,8 +1,9 @@
 import 'reflect-metadata';
-
 export * from './utils';
 export * from './events';
+export * from './metadata';
 export * from './entities';
+export * from './decorators';
 export * from './exceptions';
 export * from './value-objects';
 export * from './interfaces/domain';

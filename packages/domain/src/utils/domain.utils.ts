@@ -1,5 +1,7 @@
 import { Entity } from '../entities/entity';
+import { getMetadataByKey } from '../metadata';
 import { clone, isNull, isUndefined } from '@beincom/common';
+import { VALUE_OBJECT_NULLABLE_METADATA } from '../constants';
 import { DomainPrimitive, DomainPrimitiveProperties, ValueObject } from '../value-objects';
 
 export const isDomainPrimitiveProperties = <T = DomainPrimitive>(
@@ -44,25 +46,6 @@ export const cloneEntityProps = <T>(target, props: any): T | any => {
   }
   return entityPropsClone as unknown as T;
 };
-
-// export const cloneValueObjectProps = <T>(target, props: any): T | any => {
-//   if (isValueObject(target)) {
-//     return target.clone();
-//   }
-//
-//   if (Array.isArray(props)) {
-//     const objects = [];
-//     for (const p of props) {
-//       objects.push(cloneEntityProps(p, p));
-//     }
-//     return objects;
-//   }
-//   const entityPropsClone = {};
-//   for (const ep of Object.keys(props)) {
-//     entityPropsClone[ep] = cloneEntityProps(props[ep], props[ep]);
-//   }
-//   return entityPropsClone as unknown as T;
-// };
 
 export const cloneValueObjectProps = <VO>(target, voProps: any): VO | any => {
   if (voProps === null || voProps === undefined) {
@@ -132,4 +115,8 @@ export const getInvalidValueMessage = (vo: ValueObject<unknown>, msg?: string) =
     return msg;
   }
   return `${vo.constructor.name} value invalid`;
+};
+
+export const getNullableConfig = (name: string) => {
+  return getMetadataByKey<boolean>(`${VALUE_OBJECT_NULLABLE_METADATA}.${name}`);
 };
