@@ -4,6 +4,7 @@ import { cloneEntityProps, valueObjectToPlain } from '../utils/domain.utils';
 import { ID, DateVO, CreatedAt, UpdatedAt, DeletedAt, UUID } from '../value-objects';
 import { EntityProps, GetterEntityProps, SetterEntityProps } from '../interfaces/domain';
 import { SetterNotAllowDomainException } from '../exceptions/setter-not-allow.domain.exception';
+import * as fs from 'fs';
 
 export type EntitySetting = {
   disablePropSetter?: boolean;
@@ -11,6 +12,12 @@ export type EntitySetting = {
 
 export type EntityProperties<T> = {
   [K in keyof T]: T[K];
+};
+
+export type ChangedEntityProperties = {
+  name: string;
+  currentValue: unknown;
+  oldValue: unknown;
 };
 
 export abstract class Entity<
@@ -57,10 +64,12 @@ export abstract class Entity<
   protected constructor(entityProps: EntityProps<Identity, Props>, setting?: EntitySetting) {
     const { id, props, createdAt, updatedAt, deletedAt } = entityProps;
     this.id = id;
-    const nowValue = new DateVO({ value: new Date() });
-    this._createdAt = createdAt || CreatedAt.fromPrototype(nowValue);
-    this._updatedAt = updatedAt || new UpdatedAt({ value: null });
-    this._deletedAt = deletedAt || new DeletedAt({ value: null });
+
+    this._createdAt = createdAt?.value
+      ? createdAt
+      : CreatedAt.fromPrototype(new DateVO({ value: new Date() }));
+    this._updatedAt = updatedAt?.value ? updatedAt : new UpdatedAt({ value: null });
+    this._deletedAt = deletedAt?.value ? deletedAt : new DeletedAt({ value: null });
     this._props = props;
     this._setting = setting
       ? setting
@@ -288,5 +297,43 @@ export abstract class Entity<
    */
   public getSnapshot<T>(): T {
     return this._snapshot as unknown as T;
+  }
+
+  /**
+   * Get changed props
+   * @returns String[] | ChangedEntityProperties[]
+   */
+  public getChangedProps(): string[];
+  public getChangedProps(withValue: true): ChangedEntityProperties[];
+  public getChangedProps(...args: any[]): string[] | ChangedEntityProperties[] {
+    const withValue = args.length ? args[0] : false;
+    const isChanged = this.isChanged();
+
+    if (!isChanged) {
+      return [];
+    }
+
+    const snapshot = this.getSnapshot();
+    const entityProps = this.toObject();
+
+    const fields: string[] = [];
+    const results: ChangedEntityProperties[] = [];
+
+    for (const [prop, currentValue] of Object.entries(entityProps)) {
+      const oldValue = snapshot[prop];
+      const isPropChanged = deepEqual(oldValue, currentValue);
+
+      if (!isPropChanged) {
+        withValue
+          ? results.push({
+              name: prop,
+              currentValue,
+              oldValue,
+            })
+          : fields.push(prop);
+      }
+    }
+
+    return withValue ? results : fields;
   }
 }
