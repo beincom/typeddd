@@ -156,6 +156,20 @@ user.set('username', /** value **/);
 const isChanged = user.isChanged()
 ```
 
+#### Get changed props.
+
+```ts
+const user = new User(/**args**/);
+
+user.set('username', /** value **/);
+
+// Lấy các name của các props thay đổi.
+user.getChangedProps(); // ['username']
+
+// Lấy chi tiết các props thay đổi.
+user.getChangedProps(true); // [{ name:'username', currentValue:..., oldValue: .... }]
+```
+
 
 #### Get snapshot.
 > Snapshot entity (plaint object entity) được tạo 1 lần khi tạo mới entity.
